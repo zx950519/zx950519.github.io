@@ -43,7 +43,7 @@ public class MyClass {
 2. 生成测试类  
 按Alt+Shift+T，选择已有的测试类或新建测试类  
 ![Markdown](http://i4.bvimg.com/643127/5de0b8785e76464e.png)  
-注意勾选要进行测试的方法，最终自动生成的代码如下
+注意勾选要进行测试的方法，最终自动生成的代码如下  
 ```
 import org.junit.After;
 import org.junit.Before;
