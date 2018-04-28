@@ -24,7 +24,7 @@ Default Template选择JUnit 4
 ![Markdown](http://i4.bvimg.com/643127/d790f1033811e9f4.png)
 
 ## 实例
-1. 新建被测试的类MyClass，如下
+#### 1. 新建被测试的类MyClass，如下
 ```
 public class MyClass {
     private int radius;
@@ -40,7 +40,7 @@ public class MyClass {
     }
 }
 ```
-2. 生成测试类  
+#### 2. 生成测试类  
 按Alt+Shift+T，选择已有的测试类或新建测试类  
 ![Markdown](http://i4.bvimg.com/643127/5de0b8785e76464e.png)  
 注意勾选要进行测试的方法，最终自动生成的代码如下  
@@ -68,7 +68,7 @@ public class MyClassTest2 {
     }
 }
 ```  
-3. 编写测试逻辑
+#### 3. 编写测试逻辑
 ```
 @Test
 public void getCircle() {
@@ -77,10 +77,10 @@ public void getCircle() {
 }  
 ```  
 
-4. 运行  
+#### 4. 运行  
 ![Markdown](http://i4.bvimg.com/643127/7679a829f3a1ed94.png)  
 
-5. 运行结果  
+#### 5. 运行结果  
 ```
 Process finished with exit code 0  
 或  
@@ -89,7 +89,7 @@ Expected :6.28124
 Actual   :6.28
  <Click to see difference>
 ```  
-6. 工程结构图  
+#### 6. 工程结构图  
 ![Markdown](http://i4.bvimg.com/643127/bd12e86ac28df6c7.png)
   
 ## 声明  
