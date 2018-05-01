@@ -95,4 +95,3 @@ Actual   :6.28
 ## 声明  
 考虑到本文作者水平有限，如果你对本文章有意见，欢迎联系讨论，726710192@qq.com
 
-![Markdown](http://ww1.sinaimg.cn/large/005L0VzSgy1fqvst2xck0j30i20r3q6g.jpg)
