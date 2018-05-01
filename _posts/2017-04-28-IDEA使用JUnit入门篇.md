@@ -94,4 +94,3 @@ Actual   :6.28
   
 ## 声明  
 考虑到本文作者水平有限，如果你对本文章有意见，欢迎联系讨论，726710192@qq.com
-![Markdown](https://github.com/zx950519/zx950519.github.io/tree/master/img/alitria.png)
