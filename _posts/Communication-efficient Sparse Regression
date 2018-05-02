@@ -1,0 +1,27 @@
+---
+layout:     post
+title:      通信高效的稀疏回归
+subtitle:   Communication-efficient Sparse Regression
+date:       2018-05-02
+author:     Alitria
+header-img: img/post-bg-ios9-web.jpg
+catalog: true
+tags:
+    - Paper
+    - ML
+    - 回归
+    - JMLR
+---
+
+>不积跬步 无以至千里
+
+## Abstract  
+We devise a communication-efficient approach to distributed sparse regression in the high-dimensional setting. 
+The key idea is to average debiased or desparsified lasso estimators. We show the approach converges at the same 
+rate as the lasso as long as the dataset is not split across too many machines, and consistently estimates the 
+support under weaker conditions than the lasso. On the computational side, we propose a new parallel and 
+computationally-efficient algorithm to compute the approximate inverse covariance required in the debiasing 
+approach, when the dataset is split across samples. We further extend the approach to generalized linear models.
+## 摘要  
+
+## 关键词
