@@ -7,7 +7,8 @@ author:     Alitria
 header-img: img/post-bg-ios9-web.jpg
 catalog: true
 tags:
-    - 高维回归
+    - Paper
+    - 高维回归
     - 最小类型模型
     - 模拟退火
     - Lasso
