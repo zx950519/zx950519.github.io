@@ -2,25 +2,25 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: https://mazhuang.org
+url: https://zx950519.github.io/
 date_format: "ordinal"
-title: 码志
-subtitle: "打码改变人生"
-description: "马壮的个人博客"
-keywords: 码志, Zhuang Ma, mzlogin, mazhuang
-timezone: Asia/Shanghai
+title: 人不中二枉少年
+subtitle: "不积跬步 无以至千里"
+description: "周迅的个人博客"
+keywords: 人不中二枉少年, Zhou Xiang, blog
+timezone: Asia/HangZhou
 encoding: "utf-8"
 side_bar_repo_limit: 5
 
 # ---------------- #
 #      Author      #
 # ---------------- #
-author: Zhuang Ma
-organization: zkh360.com
-organization_url: http://www.zkh360.com
-github_username: mzlogin
-location: Wuhan, China
-email: chumpma@gmail.com
+author: Zhou Xiang
+organization: HDU(Hang Zhou Dian Zi University)
+organization_url: https://zx950519.github.io/
+github_username: zx950519
+location: HangZhou, China
+email: 726710192@qq.com
 
 # ---------------- #
 #    Navigation    #
