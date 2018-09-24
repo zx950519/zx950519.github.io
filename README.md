@@ -2,7 +2,7 @@
 
 我的个人博客：<https://github.com/zx950519/zx950519.github.io>，欢迎 Star 和 Fork。  
 
-本博客从：<https://github.com/mzlogin/mzlogin.github.io>fork而来，感谢大佬的付出。  
+本博客从：<https://github.com/mzlogin/mzlogin.github.io>  fork而来，感谢大佬的付出。  
 
 ## 概览
 
