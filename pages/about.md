@@ -1,20 +1,18 @@
 ---
 layout: page
 title: About
-description: CS will change the world！
-keywords: Zhou Xiang, 周详
+description: 打码改变世界
+keywords: Zhuang Ma, 马壮
 comments: true
 menu: 关于
 permalink: /about/
 ---
 
-我是周详。
+我是马壮，码而生，码而立。
 
-迷信「科学」。
+仰慕「优雅编码的艺术」。
 
-不聪明也不笨。
-
-个人格言：不积跬步 无以至千里。
+坚信熟能生巧，努力改变人生。
 
 ## 联系
 

@@ -2,25 +2,25 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: https://zx950519.github.io/
+url: https://mazhuang.org
 date_format: "ordinal"
-title: 人不中二枉少年
-subtitle: "不积跬步 无以至千里"
-description: "周详的个人博客"
-keywords: 人不中二枉少年, Zhou Xiang, blog
-timezone: Asia/HangZhou
+title: 码志
+subtitle: "打码改变人生"
+description: "马壮的个人博客"
+keywords: 码志, Zhuang Ma, mzlogin, mazhuang
+timezone: Asia/Shanghai
 encoding: "utf-8"
 side_bar_repo_limit: 5
 
 # ---------------- #
 #      Author      #
 # ---------------- #
-author: Zhou Xiang
-organization: HDU(Hang Zhou Dian Zi University)
-organization_url: https://zx950519.github.io/
-github_username: zx950519
-location: HangZhou, China
-email: 726710192@qq.com
+author: Zhuang Ma
+organization: zkh360.com
+organization_url: http://www.zkh360.com
+github_username: mzlogin
+location: Wuhan, China
+email: chumpma@gmail.com
 
 # ---------------- #
 #    Navigation    #
@@ -50,7 +50,6 @@ navs:
     href: /about/
     label: 关于
 
-<<<<<<< HEAD
 # ---------------- #
 #       RSS        #
 # ---------------- #
@@ -102,7 +101,13 @@ gitment:
         client_id: d2e1cbbd298958076462
         client_secret: b42a4178e5fd4a7cf63189ef4b1453b05c375709
 # https://github.com/gitalk/gitalk#install
-
+gitalk:
+    owner: mzlogin
+    repo: blog-comments
+    clientID: d2e1cbbd298958076462
+    clientSecret: b42a4178e5fd4a7cf63189ef4b1453b05c375709
+# 在使用其它评论组件时可点击显示 Disqus
+lazy_load_disqus : false
 
 # ---------------- #
 #      Search      #
@@ -118,5 +123,3 @@ simple_jekyll_search:
 # ---------------- #
 google:
     analytics_id: UA-80669434-1
-=======
->>>>>>> 0156b546c442be29dedc45682d110e3041896fc5
