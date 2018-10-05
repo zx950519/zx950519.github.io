@@ -1387,3 +1387,384 @@ class Solution {
     }
 }
 ```
+
+## 二叉树问题
+
+#### 如何判断二叉树b是否是二叉树a的子树
+```
+public boolean isSubTree(TreeNode root1,TreeNode root2) {
+    if(root2 == null)
+        return true;
+    if(root1==null && root2!=null)
+        return false;
+    if(root1.val != root2.val)
+        return false;
+    else
+        return isSubTree(root1.left, root2.left) && isSubTree(root1.right, root2.right);
+}
+```
+
+#### 求二叉树深度
+```
+import java.util.*;
+import java.math.*;
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+        if (root == null)
+            return 0;
+        return 1 + Math.max(TreeDepth(root.left), TreeDepth(root.right));
+    }
+}
+
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+            if(root==null){
+                return 0;
+        }          
+        int nLelt=TreeDepth(root.left);
+        int nRight=TreeDepth(root.right);     
+        return nLelt>nRight?(nLelt+1):(nRight+1);
+    }
+}
+```
+
+#### 判断二叉树是否对称
+题目描述
+请实现一个函数，用来判断一颗二叉树是不是对称的。注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
+```
+public class Solution {
+    boolean isSymmetrical(TreeNode pRoot) {
+        if (pRoot == null)
+            return true;
+        return func(pRoot.left, pRoot.right);
+    }
+    boolean func (TreeNode r1, TreeNode r2) {
+        
+        if(r1==null && r2==null)
+            return true;
+        if(r1==null || r2==null)
+            return false;
+        return r1.val==r2.val && func(r1.left, r2.right) && func(r1.right, r2.left);
+    }
+}
+```
+#### 二叉树中序遍历的下一个结点
+题目描述
+给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
+```
+解释：
+节点可以分成两大类：
+1、有右子树的，那么下个结点就是右子树最左边的点
+2、没有右子树的，也可以分成两类：
+    a)是父节点左孩子 ，那么父节点就是下一个节点
+    b)是父节点的右孩子找他的父节点的父节点的父节点...直到当前结点是其父节点的左孩子位置。如果没有，那么他就是尾节点。
+```
+```
+public class Solution {
+    public TreeLinkNode GetNext(TreeLinkNode pNode) {
+        if (pNode == null) 
+            return null;
+        if (pNode.right!=null) {
+            return visit(pNode.right);
+        }
+        while (pNode.next != null) {
+            if (pNode.next.left == pNode) 
+                return pNode.next;
+            pNode = pNode.next;
+        }
+        return null;
+    }
+    
+    public TreeLinkNode visit(TreeLinkNode pNode) {
+        if (pNode.left != null)
+            pNode = pNode.left;
+        return pNode;
+    }
+}
+```
+#### 二叉搜索树的后序遍历序列
+题目描述
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+```
+public class Solution {
+    public boolean VerifySquenceOfBST(int [] sequence) {
+        if(sequence.length==0) {
+            return false;
+        }
+        return func(sequence, 0, sequence.length-1);
+    }
+    
+    public boolean func(int [] data, int start, int end) {
+        if(end <= start) 
+            return true;
+        int i=start;
+        for(; i<end; i++) {
+            if(data[i] > data[end]) 
+                break;
+        }
+        for(int j=i; j<end; j++) {
+            if(data[j] < data[end]) 
+                return false;
+        }
+        return func(data, start, i-1) && func(data, i, end-1);
+    }
+}
+```
+#### 二叉树中和为某一值的路径
+题目描述
+输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
+```
+public class Solution {
+    ArrayList<ArrayList<Integer>> data = new ArrayList<ArrayList<Integer>>();
+    ArrayList<Integer> tmp = new ArrayList<Integer>();
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root,int target) {
+        if(root==null) {
+            return new ArrayList<ArrayList<Integer>>();
+        }
+        tmp.add(root.val);
+        target -= root.val;
+        if(target==0 && root.left==null && root.right==null) 
+            data.add(new ArrayList<Integer>(tmp));
+        FindPath(root.left, target);
+        FindPath(root.right, target);
+        tmp.remove(tmp.size()-1);
+        return data;
+    }
+}
+```
+#### 判断二叉树是否是镜像
+```
+class Solution {
+    
+    public boolean isSymmetric(TreeNode root) {
+        if(root==null)
+            return true;
+        return judge(root.left, root.right);
+    }
+    
+    public boolean judge(TreeNode left, TreeNode right){
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left != null && right == null) {
+            return false;
+        }
+        if (left == null && right != null) {
+            return false;
+        }
+        if (left.val != right.val) {
+            return false;
+        }
+        return judge(left.left, right.right) && judge(left.right, right.left);
+    }
+    
+}
+```
+#### 获取多叉树的深度
+&emsp;&emsp;https://leetcode-cn.com/problems/maximum-depth-of-n-ary-tree/description/  
+
+```
+class Solution {
+    int res = 0;
+    public int maxDepth(Node root) {
+        if(root==null)
+            return 0;
+        if(root!=null&&root.children.size()==0)
+            return 1;
+        opt(root, 1);
+        return res;
+    }
+    
+    public void opt(Node root, int depth) {
+        if(root==null)
+            return;
+        for(int i=0; i<root.children.size(); i++) {
+            Node tmp = root.children.get(i);
+            if(tmp!=null)
+                res = Math.max(depth+1, res);
+            opt(tmp, depth+1);
+
+        }
+    }
+}
+```
+#### 叶子相似的树
+&emsp;&emsp;https://leetcode-cn.com/problems/leaf-similar-trees/description/  
+
+```
+class Solution {
+    Queue<Integer> q1 = new LinkedList<>();
+    Queue<Integer> q2 = new LinkedList<>();
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+        judge(root1, 1);
+        judge(root2, 0);
+        while(!q1.isEmpty()){
+            int t1 = q1.poll();
+            int t2 = q2.poll();
+            if(t1!=t2)
+                return false;
+        }
+        return true;
+    }
+    
+    public void judge(TreeNode root, int flag) {
+        if(root.left==null&&root.right==null)
+            if(flag==1)
+                q1.offer(root.val);
+            else
+                q2.offer(root.val);
+        else {
+            if(root.left!=null)
+                judge(root.left, flag);
+            if(root.right!=null)
+                judge(root.right, flag);
+        }
+    }
+}
+```
+####  二叉树的右视图
+&emsp;&emsp;https://leetcode-cn.com/problems/binary-tree-right-side-view/description/  
+
+```
+class Solution {
+    Queue<TreeNode> q1 = new LinkedList<>();
+    Queue<TreeNode> q2 = new LinkedList<>();
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if(root==null)
+            return new ArrayList<>();
+        if(root.left==null&&root.right==null) {
+            res.add(root.val);
+            return res;
+        }
+        q1.offer(root);
+        while(!q1.isEmpty()||!q2.isEmpty()) {
+            int last = 0;
+            if(q1.isEmpty()==true) {
+                while(!q2.isEmpty()) {
+                    TreeNode tmp = q2.poll();
+                    if(tmp.left!=null)
+                        q1.offer(tmp.left);
+                    if(tmp.right!=null)
+                        q1.offer(tmp.right);
+                    last = tmp.val;
+                }
+            }
+            else{
+                while(!q1.isEmpty()) {
+                    TreeNode tmp = q1.poll();
+                    if(tmp.left!=null)
+                        q2.offer(tmp.left);
+                    if(tmp.right!=null)
+                        q2.offer(tmp.right);
+                    last = tmp.val;
+                }
+            }
+            res.add(last);
+        }
+        return res;   
+    }
+}
+```
+#### 递增顺序查找树
+&emsp;&emsp;https://leetcode-cn.com/problems/increasing-order-search-tree/description/  
+
+```
+class Solution {
+    List<Integer> data = new ArrayList<>();
+    public TreeNode increasingBST(TreeNode root) {
+        if(root==null)
+            return null;
+        if(root.left==null&root.right==null)
+            return root;
+        opt(root);
+        TreeNode tn = new TreeNode(data.get(0));
+        TreeNode tmp = tn;
+        tn.left = null;
+        tn.right = null;
+        for(int i=1; i<data.size(); i++) {
+            TreeNode n = new TreeNode(data.get(i));
+            n.left = null;
+            n.right = null;
+            tmp.right = n;
+            tmp = n;
+        }
+        return tn;
+    }
+    
+    public void opt(TreeNode root) {
+        if(root==null)
+            return;
+        opt(root.left);
+        data.add(root.val);
+        opt(root.right);
+    }
+}
+```
+#### 判断是否是平衡二叉树
+&emsp;&emsp;https://leetcode-cn.com/problems/balanced-binary-tree/description/  
+
+```
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root==null)
+            return true;
+        if(Math.abs(depth(root.left)-depth(root.right))>1)
+            return false;
+        else
+            return isBalanced(root.left)&&isBalanced(root.right);
+    }
+    public int depth(TreeNode root) {
+        if(root==null)
+            return 0;
+        return 1 + Math.max(depth(root.left), depth(root.right));
+    }
+}
+```
+#### 二叉树路径问题
+&emsp;&emsp;https://leetcode-cn.com/problems/path-sum/description/  
+```
+class Solution {
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if(root==null)
+            return false;
+        else if(root.left==null&&root.right==null&&sum==root.val){
+                return true;
+        }
+        else{
+            return hasPathSum(root.left,sum-root.val) || hasPathSum(root.right,sum-root.val);
+        }
+    }
+}
+```
+
+&emsp;&emsp;https://leetcode-cn.com/problems/path-sum-ii/description/  
+```
+class Solution {
+    List<List<Integer>> data = new ArrayList<>();
+    List<Integer> tmp = new ArrayList<>();
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        dfs(root, sum);
+        return data;
+    }
+    
+    public void dfs(TreeNode root, int res) {
+        if(root==null)
+            return;
+        if(root.left==null&&root.right==null) {
+            if(res-root.val==0){
+                tmp.add(root.val);
+                data.add(new ArrayList(tmp));
+                tmp.remove(tmp.size()-1);
+            }
+            return;
+        }
+        else{
+            tmp.add(root.val);
+            dfs(root.left, res-root.val);
+            dfs(root.right, res-root.val);
+            tmp.remove(tmp.size()-1);
+        }
+    }
+}
+```
