@@ -1,16 +1,16 @@
 ---
 layout: page
 title: About
-description: 打码改变世界
-keywords: Zhuang Ma, 马壮
+description: 个人介绍页
+keywords: Zhou Xiang, 周详
 comments: true
 menu: 关于
 permalink: /about/
 ---
 
-我是马壮，码而生，码而立。
+我是周详，一个普通而又不普通的程序猿。
 
-仰慕「优雅编码的艺术」。
+信仰「科学」以及「玄学」。
 
 坚信熟能生巧，努力改变人生。
 
