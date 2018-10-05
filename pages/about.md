@@ -14,11 +14,6 @@ permalink: /about/
 
 坚信熟能生巧，努力改变人生。
 
-## 联系
-
-{% for website in site.data.social %}
-* {{ website.sitename }}：[@{{ website.name }}]({{ website.url }})
-{% endfor %}
 
 ## Skill Keywords
 
