@@ -82,7 +82,7 @@ collections:
         output: true
         permalink: /wiki/:path/
 
-repository: zx950519/zx950519.github.io
+repository: mzlogin/mzlogin.github.io
 
 # ---------------- #
 #      Comments    #
