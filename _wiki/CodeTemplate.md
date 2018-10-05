@@ -318,8 +318,59 @@ class Arith{
 }
 ```
 
-## 类型转换
+## 矩阵问题
+#### 像素翻转
+&emsp;&emsp;题干：有一副由NxN矩阵表示的图像，这里每个像素用一个int表示，请编写一个算法，在不占用额外内存空间的情况下(即不使用缓存矩阵)，将图像顺时针旋转90度。给定一个NxN的矩阵，和矩阵的阶数N,请返回旋转后的NxN矩阵,保证N小于等于500，图像元素小于等于256。  
 
+&emsp;&emsp;解法：先转置，再进行列交换(第一列跟最后一列交换，第二列跟倒数第二列交换...)
+```
+import java.util.*;
+
+public class Transform {
+    public int[][] transformImage(int[][] mat, int n) {
+        // write code here
+        for(int i=0; i<mat.length; i++) {
+            for(int j=i; j<mat.length; j++) {
+                int tmp = mat[i][j];
+                mat[i][j] = mat[j][i];
+                mat[j][i] = tmp;
+            }
+        }
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<n/2; j++) {
+                int tmp = mat[i][n-1-j];
+                mat[i][n-1-j] = mat[i][j];
+                mat[i][j] = tmp;
+            }
+        }
+        return mat;
+    }
+}
+```
+&emsp;&emsp;推广：逆时针旋转90°，依旧先转置，在进行行交换
+```
+public static int[][] transformImage(int[][] mat, int n) {
+        // write code here
+        for(int i=0; i<mat.length; i++) {
+            for(int j=i; j<mat.length; j++) {
+                int tmp = mat[i][j];
+                mat[i][j] = mat[j][i];
+                mat[j][i] = tmp;
+            }
+        }
+        for(int i=0; i<n/2; i++) {
+            for(int j=0; j<n; j++) {
+                int tmp = mat[n-1-i][j];
+                mat[n-1-i][j] = mat[i][j];
+                mat[i][j] = tmp;
+            }
+        }
+        return mat;
+    }
+```
+&emsp;&emsp;推广:逆时针旋转180°，顺时针旋转180°以及更高维度的旋转操作，由旋转90°的基本操作组合即可！
+
+## 类型转换
 #### String转double
 ```
 public static boolean isDouble(String data) {
@@ -893,4 +944,878 @@ class Solution {
 ```
 ## DP问题
 
-&emsp;&emsp;移步参考链接：https://github.com/zx950519/zx950519.github.io/blob/master/_posts/2018-05-22-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%80%BB%E7%BB%93.md
+#### 不错的博客讲解
+- https://blog.csdn.net/wangdd_199326/article/details/76464333  
+
+
+#### 最长上升子序列 
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/longest-increasing-subsequence/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fubu8vgkf3j30o408aglw.jpg)  
+
+&emsp;&emsp;经典的DP问题之一，解法很多：  
+
+```
+// O(n*n)的解法，逻辑很简单，需要注意的是dp[j]>dp[i]-1这步判断，如果不加，会重复加上一些不符合要求的数
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if(nums.length==0)
+            return 0;
+        if(nums.length==1)
+            return 1;
+        int[] dp = new int[nums.length];
+        dp[0] = 1;
+        int res = 0;
+        for(int i=1; i<nums.length; i++) {
+            dp[i] = 1;
+            for(int j=0; j<i; j++) {
+                if(nums[j]<nums[i]&&dp[j]>dp[i]-1) {
+                    dp[i] = dp[j] + 1;
+                }
+            }
+            if(dp[i]>res)
+                res = dp[i];
+        }
+        return res;
+    }
+}
+```
+
+```
+// O(n*log(n))的解法
+```
+
+#### 最长公共子序列(LCS)
+
+&emsp;&emsp;经典的DP问题之一,可以采用打表的方式或者递归解决，状态转移方程如下：  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fud189qec7j30j30j4jup.jpg)  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fud1f2ms99j30io02vjrv.jpg)  
+
+&emsp;&emsp;链接：有待补充  
+
+```
+// 解法1采用打表法 printLCS方法利用矩阵print将实际的子序列依次打印出来
+    public static int LCS(char[] a, char[] b) {
+        int[][] dp = new int[a.length+1][b.length+1];
+        int[][] print = new int[a.length+1][b.length+1];
+        for(int i=0; i<a.length+1; i++)
+            dp[i][0] = 0;
+        for(int j=0; j<b.length+1; j++)
+            dp[0][j] = 0;
+        for(int i=1; i<a.length+1; i++) {
+            for(int j=1; j<b.length+1; j++) {
+                if(a[i-1]==b[j-1]) {
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                    print[i][j] = 0;
+                }
+                else if(dp[i-1][j] >= dp[i][j-1]) {
+                    dp[i][j] = dp[i-1][j];
+                    print[i][j] = 1;
+                }
+                else {
+                    dp[i][j] = dp[i][j-1];
+                    print[i][j] = -1;
+                }
+            }
+        }
+        printLCS(print, a, a.length, b.length);
+        System.out.println();
+        return dp[a.length][b.length];
+    }
+
+    public static void printLCS(int[][] data, char[] x, int i, int j) {
+        if(i==0 || j==0)
+            return;
+        if(data[i][j]==0) {
+            printLCS(data, x, i-1, j-1);
+            System.out.print(x[i-1]);
+        }
+        else if(data[i][j]==1) {
+            printLCS(data, x, i-1, j);
+        }
+        else {
+            printLCS(data, x, i, j-1);
+        }
+    }
+```
+
+```
+// 解法2，利用递归求解
+    public static int LCS2(char[] a, char[] b, int i, int j) {
+        if(i>=a.length || j>=b.length)
+            return 0;
+        if(a[i]==b[j])
+            return LCS2(a, b, i+1, j+1) + 1;
+        else
+            return Math.max(LCS2(a, b, i+1, j), LCS2(a, b, i, j+1));
+    }
+```
+
+#### 不同路径
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/unique-paths/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fu0cp794psj30no0idq3o.jpg)  
+
+&emsp;&emsp;典型的数组型DP问题，开二维数组遍历即可，递推公式为:d[i][j] = data[i-1][j] + data[i][j-1];
+
+```
+class Solution {
+    public int uniquePaths(int m, int n) {
+        if(m==1||n==1) 
+            return 1;
+        int[][] data = new int[m+1][n+1];
+        for(int i=1; i<=m; i++) {
+            for(int j=1; j<=n; j++) {
+                if(i==1&&j==1) {
+                    data[i][j] = 1;
+                    continue;
+                }
+                data[i][j] = data[i-1][j] + data[i][j-1];
+            }
+        }
+        return data[m][n];     
+    }  
+}
+```
+&emsp;&emsp;其他解法：实际上机器人总共走了m + n - 2步，其中m - 1步向下走，n - 1步向右走，那么总共不同的方法个数就相当于在步数里面m - 1和n - 1中较小的那个数的取法，实际上是一道组合数的问题。  
+
+```
+import java.util.*;
+
+class Solution {
+    public int uniquePaths(int m, int n) {
+        if(m==1||n==1) 
+            return 1;
+        double num = 1, denom = 1;
+        int small = m > n ? n : m;
+        for (int i = 1; i <= small - 1; ++i) {
+            num *= m + n - 1 - i;
+            denom *= i;
+        }
+        return (int)(num / denom);
+    }  
+}
+```
+#### 三角形最小路径和
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/triangle/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fu8d99k228j30o60aewev.jpg)  
+
+&emsp;&emsp;矩阵类DP问题：  
+
+```
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        for(int i=0; i<triangle.size(); i++) {
+            if(i==0)
+                continue;
+            List<Integer> tmp = triangle.get(i);
+            List<Integer> last = triangle.get(i-1);
+            for(int j=0; j<tmp.size(); j++) {
+                if(j==0) {
+                    tmp.set(j, tmp.get(j)+last.get(0));
+                    continue;
+                }
+                if(j==tmp.size()-1) {
+                    tmp.set(j, tmp.get(j)+last.get(last.size()-1));
+                    continue;
+                }
+                int min = Math.min(last.get(j), last.get(j-1));
+                tmp.set(j, tmp.get(j)+min);
+            }
+        }
+        List<Integer> last = triangle.get(triangle.size()-1);
+        int min = Integer.MAX_VALUE;
+        for(int i=0; i<last.size(); i++) 
+            if(last.get(i) < min)
+                min = last.get(i);
+        return min;
+    }
+}
+```
+
+#### 最大正方形 
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/maximal-square/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fu8fnlaay6j30of097aa6.jpg)  
+
+```
+class Solution {
+    public static int maximalSquare(char[][] matrix) {
+        if(matrix==null||matrix.length==0||(matrix.length==1&&matrix[0].length==0))
+            return 0;
+        if(matrix.length==1) {
+            for(int i=0; i<matrix[0].length; i++) {
+                if(matrix[0][i]=='1')
+                    return 1;
+            }
+            return 0;
+        }
+        if(matrix[0].length==1) {
+            for(int i=0; i<matrix.length; i++) {
+                if(matrix[i][0]=='1')
+                    return 1;
+            }
+            return 0;
+        }
+        int max = 0;
+        for(int i=0; i<matrix.length; i++)
+            for(int j=0; j<matrix[i].length; j++)
+                if(matrix[i][j]=='1')
+                    max = 1;
+        for(int i=0; i<matrix.length; i++) {
+            if(i==0)
+                continue;
+            for(int j=0; j<matrix[i].length; j++) {
+                if(j==0) {
+                    continue;
+                }
+                if(matrix[i][j]=='0') {
+                    continue;
+                }
+                int zs = (int)matrix[i-1][j-1] - (int)('0');
+                int ys = (int)matrix[i-1][j] - (int)('0');
+                int zx = (int)matrix[i][j-1] - (int)('0');
+                int yx = (int)matrix[i][j] - (int)('0');
+                System.out.println(zx+" "+ys +" "+zx+" "+yx);
+                if(zs>0&&ys>0&&zx>0) {
+                    yx += Math.min(Math.min(zs, ys), zx);
+                    if(yx > max)
+                        max = yx;
+                    matrix[i][j] = (char)(yx + '0');
+                }
+            }
+        }
+        if(max > 1)
+            return max*max;
+        else if(max ==1)
+            return 1;
+        else
+            return 0;
+    }
+}
+```
+#### 最大子序和
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/maximum-subarray/description/  
+
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9f8gb932j30od07st90.jpg)  
+
+&emsp;&emsp;一维数组的DP问题，状态转移方程为:f(x) = Max(f(x), f(x-1)+f(x))
+
+```
+class Solution {
+    public int maxSubArray(int[] nums) {
+        if(nums.length==1)
+            return nums[0];
+        int max = Integer.MIN_VALUE;
+        for(int i=1; i<nums.length; i++) {
+            nums[i] = Math.max(nums[i], nums[i-1]+nums[i]);
+        }
+        for(int i=0; i<nums.length; i++) {
+            if(nums[i]>max)
+                max = nums[i];
+        }
+        return max;
+    }
+}
+```
+
+#### 最小路径和
+
+&emsp;&emsp;链接:https://leetcode-cn.com/problems/minimum-path-sum/description/  
+
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9fqqw3hoj30o608ct8u.jpg)  
+
+&emsp;&emsp;二维数组的DP问题，注意边界判断，状态转移方程为f[i][j] = f[i][j] + Math.min(f[i][j-1], f[i-1][j])  
+
+
+```
+class Solution {
+    public int minPathSum(int[][] grid) {
+        if(grid.length==1) {
+            int sum = 0;
+            int[] tmp = grid[0];
+            for(int i=0; i<tmp.length; i++) {
+                sum += tmp[i];
+            }
+            return sum;
+        }
+        if(grid[0].length==1) {
+            int sum = 0;
+            for(int i=0; i<grid.length; i++) {
+                sum += grid[i][0];
+            }
+        }
+        for(int i=0; i<grid.length; i++) {
+            for(int j=0; j<grid[i].length; j++) {
+                if(i==0&&j==0)
+                    continue;
+                if(i==0&&j!=0){
+                    grid[i][j] += grid[i][j-1];
+                    continue;
+                }
+                if(j==0&&i!=0) {
+                    grid[i][j] += grid[i-1][j];
+                    continue;
+                }
+                int tmp = Math.min(grid[i][j-1], grid[i-1][j]);
+                grid[i][j] += tmp;
+            }
+        }
+        return grid[grid.length-1][grid[0].length-1];
+    }
+}
+```
+
+#### 使用最小花费爬楼梯
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/min-cost-climbing-stairs/description/  
+
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9gjwa83zj30o40cd74z.jpg)  
+
+&emsp;&emsp;一维数组DP问题，有点小坑。值得注意的是，需要新开一个长度比cost大1的新数组dp，令dp[0]=cost[0],dp[1]=cost[1],然后运行状态转移方程dp[i]=cost[i]+min(dp[i-1], dp[i-2]),此外需要额外注意的是cost[cost.length]=0。  
+
+```
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        if(cost.length<2)
+            return cost[0];
+        if(cost.length==2)
+            return Math.min(cost[0], cost[1]);
+        int[] dp = new int[cost.length+1];
+        dp[0] = cost[0];
+        dp[1] = cost[1];
+        for(int i=2; i<=cost.length; i++) {
+            int tmp = 0;
+            if(i<cost.length)
+                tmp = cost[i];
+            dp[i] = tmp + Math.min(dp[i-1], dp[i-2]);
+        }
+        return dp[cost.length];
+    }
+}
+```
+
+#### 打家劫舍
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/house-robber/description/  
+
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9hutgtnvj30o60as0t9.jpg)  
+
+&emsp;&emsp;一维数组DP问题，坑比较多。需要额外对数组长度为3及其以下的情况剪枝，当长度为4以上才可以进行正常的迭代。新开一个数组dp，状态转移方程为：dp[i] = nums[i]+max(dp[i-2], dp[i-3])  
+
+```
+class Solution {
+    public int rob(int[] nums) {
+        if(nums.length==0)
+            return 0;
+        if(nums.length==1)
+            return nums[0];
+        if(nums.length==2)
+            return Math.max(nums[0], nums[1]);
+        if(nums.length==3)
+            return Math.max(nums[0]+nums[2], nums[1]);
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        dp[1] = nums[1];
+        dp[2] = Math.max(nums[0]+nums[2], nums[1]);
+        int res = dp[2];
+        for(int i=3; i<nums.length; i++) {
+            dp[i] = nums[i] + Math.max(dp[i-2], dp[i-3]);
+            if(dp[i]>res)
+                res = dp[i];
+        }
+        return res;
+    }
+}
+```
+
+#### 整数拆分
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/integer-break/description/  
+
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9inrre5bj30oh08q3yu.jpg)  
+
+&emsp;&emsp;一维数组DP问题，注意2、3的特殊情况，从4开始可以开始迭代。状态转移方程形式不同，参考代码即可。  
+
+```
+class Solution {
+    public int integerBreak(int n) {
+        if(n==2)
+            return 1;
+        if(n==3)
+            return 2;
+        if(n==4)
+            return 4;
+        int[] dp = new int[n+1];
+        dp[0] = 0;
+        dp[1] = 1;
+        dp[2] = 2;
+        dp[3] = 3;
+        for(int i=4; i<=n; i++) {
+            int tmp = Integer.MIN_VALUE;
+            for(int j=1; j<=(int)(i/2); j++) {
+                if(dp[j]*dp[i-j]>tmp)
+                    tmp = dp[j]*dp[i-j];
+            }
+            dp[i] = tmp;
+        }
+        return dp[n];
+    }
+}
+```
+
+#### 买卖股票的最佳时机
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fuannswa68j30o10abaaf.jpg)  
+
+&emsp;&emsp;一维数组DP问题，可用暴力可解决。设一个变量min保存最低值，另一个变量res保存当前最优差值。  
+
+```
+class Solution {
+    public int maxProfit(int[] prices) {
+        if(prices.length==0)
+            return 0;
+        if(prices.length==1)
+            return 0;
+        if(prices.length==2&&prices[0]>=prices[1])
+            return 0;
+        // int[] dp = new int[prices.length];
+        // int res = Integer.MIN_VALUE;
+        // for(int i=1; i<prices.length; i++) {
+        //     int tmp = Integer.MAX_VALUE;
+        //     for(int j=0; j<i; j++) {
+        //         if(prices[j]<tmp)
+        //             tmp = prices[j];
+        //     }
+        //     if(tmp>=prices[i])
+        //         dp[i] = 0;
+        //     else
+        //         dp[i] = prices[i] - tmp;
+        //     if(dp[i]>res)
+        //         res = dp[i];
+        // }
+        // return res;
+        
+        int min = Integer.MAX_VALUE;
+        int res = 0;
+        for(int i=0; i<prices.length; i++) {
+            min = Math.min(min, prices[i]);
+            res = Math.max(res, prices[i] - min);
+        }
+        return res;
+    }
+}
+```
+
+#### 完全平方数
+&emsp;&emsp;链接:https://leetcode-cn.com/problems/perfect-squares/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fvamcptsb9j30q909c0sx.jpg)  
+
+```
+class Solution {
+    public int numSquares(int n) {
+        int[] dp = new int[n+1];
+        for(int i=1; i<=n; i++)
+            dp[i] = Integer.MAX_VALUE;
+        dp[0] = 0;
+        for(int i=0; i<=n; i++) {
+            for(int j=1; i+j*j<=n; j++) {
+                dp[i+j*j] = Math.min(dp[i+j*j], dp[i]+1);
+            }
+        }
+        return dp[n];
+    }
+}
+```
+
+## 二叉树问题
+
+#### 如何判断二叉树b是否是二叉树a的子树
+```
+public boolean isSubTree(TreeNode root1,TreeNode root2) {
+    if(root2 == null)
+        return true;
+    if(root1==null && root2!=null)
+        return false;
+    if(root1.val != root2.val)
+        return false;
+    else
+        return isSubTree(root1.left, root2.left) && isSubTree(root1.right, root2.right);
+}
+```
+
+#### 求二叉树深度
+```
+import java.util.*;
+import java.math.*;
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+        if (root == null)
+            return 0;
+        return 1 + Math.max(TreeDepth(root.left), TreeDepth(root.right));
+    }
+}
+
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+            if(root==null){
+                return 0;
+        }          
+        int nLelt=TreeDepth(root.left);
+        int nRight=TreeDepth(root.right);     
+        return nLelt>nRight?(nLelt+1):(nRight+1);
+    }
+}
+```
+
+#### 判断二叉树是否对称
+题目描述
+请实现一个函数，用来判断一颗二叉树是不是对称的。注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
+```
+public class Solution {
+    boolean isSymmetrical(TreeNode pRoot) {
+        if (pRoot == null)
+            return true;
+        return func(pRoot.left, pRoot.right);
+    }
+    boolean func (TreeNode r1, TreeNode r2) {
+        
+        if(r1==null && r2==null)
+            return true;
+        if(r1==null || r2==null)
+            return false;
+        return r1.val==r2.val && func(r1.left, r2.right) && func(r1.right, r2.left);
+    }
+}
+```
+#### 二叉树中序遍历的下一个结点
+题目描述
+给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
+```
+解释：
+节点可以分成两大类：
+1、有右子树的，那么下个结点就是右子树最左边的点
+2、没有右子树的，也可以分成两类：
+    a)是父节点左孩子 ，那么父节点就是下一个节点
+    b)是父节点的右孩子找他的父节点的父节点的父节点...直到当前结点是其父节点的左孩子位置。如果没有，那么他就是尾节点。
+```
+```
+public class Solution {
+    public TreeLinkNode GetNext(TreeLinkNode pNode) {
+        if (pNode == null) 
+            return null;
+        if (pNode.right!=null) {
+            return visit(pNode.right);
+        }
+        while (pNode.next != null) {
+            if (pNode.next.left == pNode) 
+                return pNode.next;
+            pNode = pNode.next;
+        }
+        return null;
+    }
+    
+    public TreeLinkNode visit(TreeLinkNode pNode) {
+        if (pNode.left != null)
+            pNode = pNode.left;
+        return pNode;
+    }
+}
+```
+#### 二叉搜索树的后序遍历序列
+题目描述
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+```
+public class Solution {
+    public boolean VerifySquenceOfBST(int [] sequence) {
+        if(sequence.length==0) {
+            return false;
+        }
+        return func(sequence, 0, sequence.length-1);
+    }
+    
+    public boolean func(int [] data, int start, int end) {
+        if(end <= start) 
+            return true;
+        int i=start;
+        for(; i<end; i++) {
+            if(data[i] > data[end]) 
+                break;
+        }
+        for(int j=i; j<end; j++) {
+            if(data[j] < data[end]) 
+                return false;
+        }
+        return func(data, start, i-1) && func(data, i, end-1);
+    }
+}
+```
+#### 二叉树中和为某一值的路径
+题目描述
+输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
+```
+public class Solution {
+    ArrayList<ArrayList<Integer>> data = new ArrayList<ArrayList<Integer>>();
+    ArrayList<Integer> tmp = new ArrayList<Integer>();
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root,int target) {
+        if(root==null) {
+            return new ArrayList<ArrayList<Integer>>();
+        }
+        tmp.add(root.val);
+        target -= root.val;
+        if(target==0 && root.left==null && root.right==null) 
+            data.add(new ArrayList<Integer>(tmp));
+        FindPath(root.left, target);
+        FindPath(root.right, target);
+        tmp.remove(tmp.size()-1);
+        return data;
+    }
+}
+```
+#### 判断二叉树是否是镜像
+```
+class Solution {
+    
+    public boolean isSymmetric(TreeNode root) {
+        if(root==null)
+            return true;
+        return judge(root.left, root.right);
+    }
+    
+    public boolean judge(TreeNode left, TreeNode right){
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left != null && right == null) {
+            return false;
+        }
+        if (left == null && right != null) {
+            return false;
+        }
+        if (left.val != right.val) {
+            return false;
+        }
+        return judge(left.left, right.right) && judge(left.right, right.left);
+    }
+    
+}
+```
+#### 获取多叉树的深度
+&emsp;&emsp;https://leetcode-cn.com/problems/maximum-depth-of-n-ary-tree/description/  
+
+```
+class Solution {
+    int res = 0;
+    public int maxDepth(Node root) {
+        if(root==null)
+            return 0;
+        if(root!=null&&root.children.size()==0)
+            return 1;
+        opt(root, 1);
+        return res;
+    }
+    
+    public void opt(Node root, int depth) {
+        if(root==null)
+            return;
+        for(int i=0; i<root.children.size(); i++) {
+            Node tmp = root.children.get(i);
+            if(tmp!=null)
+                res = Math.max(depth+1, res);
+            opt(tmp, depth+1);
+
+        }
+    }
+}
+```
+#### 叶子相似的树
+&emsp;&emsp;https://leetcode-cn.com/problems/leaf-similar-trees/description/  
+
+```
+class Solution {
+    Queue<Integer> q1 = new LinkedList<>();
+    Queue<Integer> q2 = new LinkedList<>();
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+        judge(root1, 1);
+        judge(root2, 0);
+        while(!q1.isEmpty()){
+            int t1 = q1.poll();
+            int t2 = q2.poll();
+            if(t1!=t2)
+                return false;
+        }
+        return true;
+    }
+    
+    public void judge(TreeNode root, int flag) {
+        if(root.left==null&&root.right==null)
+            if(flag==1)
+                q1.offer(root.val);
+            else
+                q2.offer(root.val);
+        else {
+            if(root.left!=null)
+                judge(root.left, flag);
+            if(root.right!=null)
+                judge(root.right, flag);
+        }
+    }
+}
+```
+####  二叉树的右视图
+&emsp;&emsp;https://leetcode-cn.com/problems/binary-tree-right-side-view/description/  
+
+```
+class Solution {
+    Queue<TreeNode> q1 = new LinkedList<>();
+    Queue<TreeNode> q2 = new LinkedList<>();
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if(root==null)
+            return new ArrayList<>();
+        if(root.left==null&&root.right==null) {
+            res.add(root.val);
+            return res;
+        }
+        q1.offer(root);
+        while(!q1.isEmpty()||!q2.isEmpty()) {
+            int last = 0;
+            if(q1.isEmpty()==true) {
+                while(!q2.isEmpty()) {
+                    TreeNode tmp = q2.poll();
+                    if(tmp.left!=null)
+                        q1.offer(tmp.left);
+                    if(tmp.right!=null)
+                        q1.offer(tmp.right);
+                    last = tmp.val;
+                }
+            }
+            else{
+                while(!q1.isEmpty()) {
+                    TreeNode tmp = q1.poll();
+                    if(tmp.left!=null)
+                        q2.offer(tmp.left);
+                    if(tmp.right!=null)
+                        q2.offer(tmp.right);
+                    last = tmp.val;
+                }
+            }
+            res.add(last);
+        }
+        return res;   
+    }
+}
+```
+#### 递增顺序查找树
+&emsp;&emsp;https://leetcode-cn.com/problems/increasing-order-search-tree/description/  
+
+```
+class Solution {
+    List<Integer> data = new ArrayList<>();
+    public TreeNode increasingBST(TreeNode root) {
+        if(root==null)
+            return null;
+        if(root.left==null&root.right==null)
+            return root;
+        opt(root);
+        TreeNode tn = new TreeNode(data.get(0));
+        TreeNode tmp = tn;
+        tn.left = null;
+        tn.right = null;
+        for(int i=1; i<data.size(); i++) {
+            TreeNode n = new TreeNode(data.get(i));
+            n.left = null;
+            n.right = null;
+            tmp.right = n;
+            tmp = n;
+        }
+        return tn;
+    }
+    
+    public void opt(TreeNode root) {
+        if(root==null)
+            return;
+        opt(root.left);
+        data.add(root.val);
+        opt(root.right);
+    }
+}
+```
+#### 判断是否是平衡二叉树
+&emsp;&emsp;https://leetcode-cn.com/problems/balanced-binary-tree/description/  
+
+```
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root==null)
+            return true;
+        if(Math.abs(depth(root.left)-depth(root.right))>1)
+            return false;
+        else
+            return isBalanced(root.left)&&isBalanced(root.right);
+    }
+    public int depth(TreeNode root) {
+        if(root==null)
+            return 0;
+        return 1 + Math.max(depth(root.left), depth(root.right));
+    }
+}
+```
+#### 二叉树路径问题
+&emsp;&emsp;https://leetcode-cn.com/problems/path-sum/description/  
+```
+class Solution {
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if(root==null)
+            return false;
+        else if(root.left==null&&root.right==null&&sum==root.val){
+                return true;
+        }
+        else{
+            return hasPathSum(root.left,sum-root.val) || hasPathSum(root.right,sum-root.val);
+        }
+    }
+}
+```
+
+&emsp;&emsp;https://leetcode-cn.com/problems/path-sum-ii/description/  
+```
+class Solution {
+    List<List<Integer>> data = new ArrayList<>();
+    List<Integer> tmp = new ArrayList<>();
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        dfs(root, sum);
+        return data;
+    }
+    
+    public void dfs(TreeNode root, int res) {
+        if(root==null)
+            return;
+        if(root.left==null&&root.right==null) {
+            if(res-root.val==0){
+                tmp.add(root.val);
+                data.add(new ArrayList(tmp));
+                tmp.remove(tmp.size()-1);
+            }
+            return;
+        }
+        else{
+            tmp.add(root.val);
+            dfs(root.left, res-root.val);
+            dfs(root.right, res-root.val);
+            tmp.remove(tmp.size()-1);
+        }
+    }
+}
+```
