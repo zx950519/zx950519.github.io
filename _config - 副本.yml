@@ -1,0 +1,52 @@
+# ---------------- #
+#   Main Configs   #
+# ---------------- #
+baseurl:
+url: https://zx950519.github.io/
+date_format: "ordinal"
+title: 人不中二枉少年
+subtitle: "不积跬步 无以至千里"
+description: "周迅的个人博客"
+keywords: 人不中二枉少年, Zhou Xiang, blog
+timezone: Asia/HangZhou
+encoding: "utf-8"
+side_bar_repo_limit: 5
+
+# ---------------- #
+#      Author      #
+# ---------------- #
+author: Zhou Xiang
+organization: HDU(Hang Zhou Dian Zi University)
+organization_url: https://zx950519.github.io/
+github_username: zx950519
+location: HangZhou, China
+email: 726710192@qq.com
+
+# ---------------- #
+#    Navigation    #
+# ---------------- #
+navs:
+  -
+    href: /
+    label: 首页
+
+  -
+    href: /categories/
+    label: 分类
+
+#   -
+#     href: /archives/
+#     label: 归档
+
+  -
+    href: /wiki/
+    label: 维基
+
+  -
+    href: /links/
+    label: 链接
+
+  -
+    href: /about/
+    label: 关于
+
