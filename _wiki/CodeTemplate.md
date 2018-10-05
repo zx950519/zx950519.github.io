@@ -893,4 +893,497 @@ class Solution {
 ```
 ## DP问题
 
-&emsp;&emsp;移步参考链接：https://github.com/zx950519/zx950519.github.io/blob/master/_posts/2018-05-22-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%80%BB%E7%BB%93.md
+#### 不错的博客讲解
+- https://blog.csdn.net/wangdd_199326/article/details/76464333  
+
+
+#### 最长上升子序列 
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/longest-increasing-subsequence/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fubu8vgkf3j30o408aglw.jpg)  
+
+&emsp;&emsp;经典的DP问题之一，解法很多：  
+
+```
+// O(n*n)的解法，逻辑很简单，需要注意的是dp[j]>dp[i]-1这步判断，如果不加，会重复加上一些不符合要求的数
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if(nums.length==0)
+            return 0;
+        if(nums.length==1)
+            return 1;
+        int[] dp = new int[nums.length];
+        dp[0] = 1;
+        int res = 0;
+        for(int i=1; i<nums.length; i++) {
+            dp[i] = 1;
+            for(int j=0; j<i; j++) {
+                if(nums[j]<nums[i]&&dp[j]>dp[i]-1) {
+                    dp[i] = dp[j] + 1;
+                }
+            }
+            if(dp[i]>res)
+                res = dp[i];
+        }
+        return res;
+    }
+}
+```
+
+```
+// O(n*log(n))的解法
+```
+
+#### 最长公共子序列(LCS)
+
+&emsp;&emsp;经典的DP问题之一,可以采用打表的方式或者递归解决，状态转移方程如下：  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fud189qec7j30j30j4jup.jpg)  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fud1f2ms99j30io02vjrv.jpg)  
+
+&emsp;&emsp;链接：有待补充  
+
+```
+// 解法1采用打表法 printLCS方法利用矩阵print将实际的子序列依次打印出来
+    public static int LCS(char[] a, char[] b) {
+        int[][] dp = new int[a.length+1][b.length+1];
+        int[][] print = new int[a.length+1][b.length+1];
+        for(int i=0; i<a.length+1; i++)
+            dp[i][0] = 0;
+        for(int j=0; j<b.length+1; j++)
+            dp[0][j] = 0;
+        for(int i=1; i<a.length+1; i++) {
+            for(int j=1; j<b.length+1; j++) {
+                if(a[i-1]==b[j-1]) {
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                    print[i][j] = 0;
+                }
+                else if(dp[i-1][j] >= dp[i][j-1]) {
+                    dp[i][j] = dp[i-1][j];
+                    print[i][j] = 1;
+                }
+                else {
+                    dp[i][j] = dp[i][j-1];
+                    print[i][j] = -1;
+                }
+            }
+        }
+        printLCS(print, a, a.length, b.length);
+        System.out.println();
+        return dp[a.length][b.length];
+    }
+
+    public static void printLCS(int[][] data, char[] x, int i, int j) {
+        if(i==0 || j==0)
+            return;
+        if(data[i][j]==0) {
+            printLCS(data, x, i-1, j-1);
+            System.out.print(x[i-1]);
+        }
+        else if(data[i][j]==1) {
+            printLCS(data, x, i-1, j);
+        }
+        else {
+            printLCS(data, x, i, j-1);
+        }
+    }
+```
+
+```
+// 解法2，利用递归求解
+    public static int LCS2(char[] a, char[] b, int i, int j) {
+        if(i>=a.length || j>=b.length)
+            return 0;
+        if(a[i]==b[j])
+            return LCS2(a, b, i+1, j+1) + 1;
+        else
+            return Math.max(LCS2(a, b, i+1, j), LCS2(a, b, i, j+1));
+    }
+```
+
+#### 不同路径
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/unique-paths/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fu0cp794psj30no0idq3o.jpg)  
+
+&emsp;&emsp;典型的数组型DP问题，开二维数组遍历即可，递推公式为:d[i][j] = data[i-1][j] + data[i][j-1];
+
+```
+class Solution {
+    public int uniquePaths(int m, int n) {
+        if(m==1||n==1) 
+            return 1;
+        int[][] data = new int[m+1][n+1];
+        for(int i=1; i<=m; i++) {
+            for(int j=1; j<=n; j++) {
+                if(i==1&&j==1) {
+                    data[i][j] = 1;
+                    continue;
+                }
+                data[i][j] = data[i-1][j] + data[i][j-1];
+            }
+        }
+        return data[m][n];     
+    }  
+}
+```
+&emsp;&emsp;其他解法：实际上机器人总共走了m + n - 2步，其中m - 1步向下走，n - 1步向右走，那么总共不同的方法个数就相当于在步数里面m - 1和n - 1中较小的那个数的取法，实际上是一道组合数的问题。  
+
+```
+import java.util.*;
+
+class Solution {
+    public int uniquePaths(int m, int n) {
+        if(m==1||n==1) 
+            return 1;
+        double num = 1, denom = 1;
+        int small = m > n ? n : m;
+        for (int i = 1; i <= small - 1; ++i) {
+            num *= m + n - 1 - i;
+            denom *= i;
+        }
+        return (int)(num / denom);
+    }  
+}
+```
+#### 三角形最小路径和
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/triangle/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fu8d99k228j30o60aewev.jpg)  
+
+&emsp;&emsp;矩阵类DP问题：  
+
+```
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        for(int i=0; i<triangle.size(); i++) {
+            if(i==0)
+                continue;
+            List<Integer> tmp = triangle.get(i);
+            List<Integer> last = triangle.get(i-1);
+            for(int j=0; j<tmp.size(); j++) {
+                if(j==0) {
+                    tmp.set(j, tmp.get(j)+last.get(0));
+                    continue;
+                }
+                if(j==tmp.size()-1) {
+                    tmp.set(j, tmp.get(j)+last.get(last.size()-1));
+                    continue;
+                }
+                int min = Math.min(last.get(j), last.get(j-1));
+                tmp.set(j, tmp.get(j)+min);
+            }
+        }
+        List<Integer> last = triangle.get(triangle.size()-1);
+        int min = Integer.MAX_VALUE;
+        for(int i=0; i<last.size(); i++) 
+            if(last.get(i) < min)
+                min = last.get(i);
+        return min;
+    }
+}
+```
+
+#### 最大正方形 
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/maximal-square/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fu8fnlaay6j30of097aa6.jpg)  
+
+```
+class Solution {
+    public static int maximalSquare(char[][] matrix) {
+        if(matrix==null||matrix.length==0||(matrix.length==1&&matrix[0].length==0))
+            return 0;
+        if(matrix.length==1) {
+            for(int i=0; i<matrix[0].length; i++) {
+                if(matrix[0][i]=='1')
+                    return 1;
+            }
+            return 0;
+        }
+        if(matrix[0].length==1) {
+            for(int i=0; i<matrix.length; i++) {
+                if(matrix[i][0]=='1')
+                    return 1;
+            }
+            return 0;
+        }
+        int max = 0;
+        for(int i=0; i<matrix.length; i++)
+            for(int j=0; j<matrix[i].length; j++)
+                if(matrix[i][j]=='1')
+                    max = 1;
+        for(int i=0; i<matrix.length; i++) {
+            if(i==0)
+                continue;
+            for(int j=0; j<matrix[i].length; j++) {
+                if(j==0) {
+                    continue;
+                }
+                if(matrix[i][j]=='0') {
+                    continue;
+                }
+                int zs = (int)matrix[i-1][j-1] - (int)('0');
+                int ys = (int)matrix[i-1][j] - (int)('0');
+                int zx = (int)matrix[i][j-1] - (int)('0');
+                int yx = (int)matrix[i][j] - (int)('0');
+                System.out.println(zx+" "+ys +" "+zx+" "+yx);
+                if(zs>0&&ys>0&&zx>0) {
+                    yx += Math.min(Math.min(zs, ys), zx);
+                    if(yx > max)
+                        max = yx;
+                    matrix[i][j] = (char)(yx + '0');
+                }
+            }
+        }
+        if(max > 1)
+            return max*max;
+        else if(max ==1)
+            return 1;
+        else
+            return 0;
+    }
+}
+```
+#### 最大子序和
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/maximum-subarray/description/  
+
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9f8gb932j30od07st90.jpg)  
+
+&emsp;&emsp;一维数组的DP问题，状态转移方程为:f(x) = Max(f(x), f(x-1)+f(x))
+
+```
+class Solution {
+    public int maxSubArray(int[] nums) {
+        if(nums.length==1)
+            return nums[0];
+        int max = Integer.MIN_VALUE;
+        for(int i=1; i<nums.length; i++) {
+            nums[i] = Math.max(nums[i], nums[i-1]+nums[i]);
+        }
+        for(int i=0; i<nums.length; i++) {
+            if(nums[i]>max)
+                max = nums[i];
+        }
+        return max;
+    }
+}
+```
+
+#### 最小路径和
+
+&emsp;&emsp;链接:https://leetcode-cn.com/problems/minimum-path-sum/description/  
+
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9fqqw3hoj30o608ct8u.jpg)  
+
+&emsp;&emsp;二维数组的DP问题，注意边界判断，状态转移方程为f[i][j] = f[i][j] + Math.min(f[i][j-1], f[i-1][j])  
+
+
+```
+class Solution {
+    public int minPathSum(int[][] grid) {
+        if(grid.length==1) {
+            int sum = 0;
+            int[] tmp = grid[0];
+            for(int i=0; i<tmp.length; i++) {
+                sum += tmp[i];
+            }
+            return sum;
+        }
+        if(grid[0].length==1) {
+            int sum = 0;
+            for(int i=0; i<grid.length; i++) {
+                sum += grid[i][0];
+            }
+        }
+        for(int i=0; i<grid.length; i++) {
+            for(int j=0; j<grid[i].length; j++) {
+                if(i==0&&j==0)
+                    continue;
+                if(i==0&&j!=0){
+                    grid[i][j] += grid[i][j-1];
+                    continue;
+                }
+                if(j==0&&i!=0) {
+                    grid[i][j] += grid[i-1][j];
+                    continue;
+                }
+                int tmp = Math.min(grid[i][j-1], grid[i-1][j]);
+                grid[i][j] += tmp;
+            }
+        }
+        return grid[grid.length-1][grid[0].length-1];
+    }
+}
+```
+
+#### 使用最小花费爬楼梯
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/min-cost-climbing-stairs/description/  
+
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9gjwa83zj30o40cd74z.jpg)  
+
+&emsp;&emsp;一维数组DP问题，有点小坑。值得注意的是，需要新开一个长度比cost大1的新数组dp，令dp[0]=cost[0],dp[1]=cost[1],然后运行状态转移方程dp[i]=cost[i]+min(dp[i-1], dp[i-2]),此外需要额外注意的是cost[cost.length]=0。  
+
+```
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        if(cost.length<2)
+            return cost[0];
+        if(cost.length==2)
+            return Math.min(cost[0], cost[1]);
+        int[] dp = new int[cost.length+1];
+        dp[0] = cost[0];
+        dp[1] = cost[1];
+        for(int i=2; i<=cost.length; i++) {
+            int tmp = 0;
+            if(i<cost.length)
+                tmp = cost[i];
+            dp[i] = tmp + Math.min(dp[i-1], dp[i-2]);
+        }
+        return dp[cost.length];
+    }
+}
+```
+
+#### 打家劫舍
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/house-robber/description/  
+
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9hutgtnvj30o60as0t9.jpg)  
+
+&emsp;&emsp;一维数组DP问题，坑比较多。需要额外对数组长度为3及其以下的情况剪枝，当长度为4以上才可以进行正常的迭代。新开一个数组dp，状态转移方程为：dp[i] = nums[i]+max(dp[i-2], dp[i-3])  
+
+```
+class Solution {
+    public int rob(int[] nums) {
+        if(nums.length==0)
+            return 0;
+        if(nums.length==1)
+            return nums[0];
+        if(nums.length==2)
+            return Math.max(nums[0], nums[1]);
+        if(nums.length==3)
+            return Math.max(nums[0]+nums[2], nums[1]);
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        dp[1] = nums[1];
+        dp[2] = Math.max(nums[0]+nums[2], nums[1]);
+        int res = dp[2];
+        for(int i=3; i<nums.length; i++) {
+            dp[i] = nums[i] + Math.max(dp[i-2], dp[i-3]);
+            if(dp[i]>res)
+                res = dp[i];
+        }
+        return res;
+    }
+}
+```
+
+#### 整数拆分
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/integer-break/description/  
+
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9inrre5bj30oh08q3yu.jpg)  
+
+&emsp;&emsp;一维数组DP问题，注意2、3的特殊情况，从4开始可以开始迭代。状态转移方程形式不同，参考代码即可。  
+
+```
+class Solution {
+    public int integerBreak(int n) {
+        if(n==2)
+            return 1;
+        if(n==3)
+            return 2;
+        if(n==4)
+            return 4;
+        int[] dp = new int[n+1];
+        dp[0] = 0;
+        dp[1] = 1;
+        dp[2] = 2;
+        dp[3] = 3;
+        for(int i=4; i<=n; i++) {
+            int tmp = Integer.MIN_VALUE;
+            for(int j=1; j<=(int)(i/2); j++) {
+                if(dp[j]*dp[i-j]>tmp)
+                    tmp = dp[j]*dp[i-j];
+            }
+            dp[i] = tmp;
+        }
+        return dp[n];
+    }
+}
+```
+
+#### 买卖股票的最佳时机
+
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fuannswa68j30o10abaaf.jpg)  
+
+&emsp;&emsp;一维数组DP问题，可用暴力可解决。设一个变量min保存最低值，另一个变量res保存当前最优差值。  
+
+```
+class Solution {
+    public int maxProfit(int[] prices) {
+        if(prices.length==0)
+            return 0;
+        if(prices.length==1)
+            return 0;
+        if(prices.length==2&&prices[0]>=prices[1])
+            return 0;
+        // int[] dp = new int[prices.length];
+        // int res = Integer.MIN_VALUE;
+        // for(int i=1; i<prices.length; i++) {
+        //     int tmp = Integer.MAX_VALUE;
+        //     for(int j=0; j<i; j++) {
+        //         if(prices[j]<tmp)
+        //             tmp = prices[j];
+        //     }
+        //     if(tmp>=prices[i])
+        //         dp[i] = 0;
+        //     else
+        //         dp[i] = prices[i] - tmp;
+        //     if(dp[i]>res)
+        //         res = dp[i];
+        // }
+        // return res;
+        
+        int min = Integer.MAX_VALUE;
+        int res = 0;
+        for(int i=0; i<prices.length; i++) {
+            min = Math.min(min, prices[i]);
+            res = Math.max(res, prices[i] - min);
+        }
+        return res;
+    }
+}
+```
+
+#### 完全平方数
+&emsp;&emsp;链接:https://leetcode-cn.com/problems/perfect-squares/description/  
+
+![](https://ws1.sinaimg.cn/large/005L0VzSgy1fvamcptsb9j30q909c0sx.jpg)  
+
+```
+class Solution {
+    public int numSquares(int n) {
+        int[] dp = new int[n+1];
+        for(int i=1; i<=n; i++)
+            dp[i] = Integer.MAX_VALUE;
+        dp[0] = 0;
+        for(int i=0; i<=n; i++) {
+            for(int j=1; i+j*j<=n; j++) {
+                dp[i+j*j] = Math.min(dp[i+j*j], dp[i]+1);
+            }
+        }
+        return dp[n];
+    }
+}
+```
