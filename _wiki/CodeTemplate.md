@@ -1025,6 +1025,29 @@ class Solution {
 #### 不错的博客讲解
 - https://blog.csdn.net/wangdd_199326/article/details/76464333  
 
+#### 多重部分和
+&emsp;&emsp;算法竞赛入门，p62(有n钟不同大小的数字ai,每种个，mi个,判断是否可以组合成指定数k)  
+```
+int n;//多少种数字
+int k;//目标和
+int a[N]//各个数字
+int m[M]//每种数字的个数
+boolean dp[n+1][k+1];
+boolean opt() {
+    dp[0][0] = true;
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<=k; j++) {
+            for(int p=0; p<=j&&p*a[i]<=j; p++) {
+                dp[i+1][j] = dp[i+1][j] | dp[i][j-p*a[i]];
+            }
+        }
+    }
+    if(dp[n][k])
+        return true;
+    else
+        return false;
+}
+```
 
 #### 最长上升子序列 
 
