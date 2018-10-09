@@ -740,6 +740,31 @@ int gcd(int a, int b) {
     return gcd(b, a%b);
 }
 ```
+#### 拓展欧几里得算法
+```
+public class Main {
+    public static void main(String[] args) {
+        long[] da = extgcd(5, 7);
+        System.out.println("x="+da[1]+",y="+da[2]+",gcd="+da[0]);
+    }
+    public static long[] extgcd(long a,long b){
+        long ans;
+        long[] res=new long[3];
+        if(b==0) {
+            res[0]=a;
+            res[1]=1;
+            res[2]=0;
+            return res;
+        }
+        long [] temp=extgcd(b,a%b);
+        ans = temp[0];
+        res[0]=ans;
+        res[1]=temp[2];
+        res[2]=temp[1]-(a/b)*temp[2];
+        return res;
+    }
+}
+```
 #### 线段上的格点数
 &emsp;&emsp;求p1(x1, y1)与p2(x2, y2)之间的线段上除p1,p2外有多少个格点  
 ```
