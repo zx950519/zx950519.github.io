@@ -732,20 +732,26 @@ public class Main{
 
 ## 数学问题
 
+#### 辗转相除法
+```
+int gcd(int a, int b) {
+    if(b==0)
+        return a;
+    return gcd(b, a%b);
+}
+```
+#### 线段上的格点数
+&emsp;&emsp;求p1(x1, y1)与p2(x2, y2)之间的线段上除p1,p2外有多少个格点  
+```
+res = |x1-x2|与|y1-y2|最大公约数-1
+```
 #### 数列片段和
-
 &emsp;&emsp;例如，给定数列{0.1, 0.2, 0.3, 0.4}，我们有(0.1) (0.1, 0.2) (0.1, 0.2, 0.3) (0.1, 0.2, 0.3, 0.4) (0.2) (0.2, 0.3) (0.2, 0.3, 0.4) (0.3) (0.3, 0.4) (0.4) 这10个片段。 给定正整数数列，求出全部片段包含的所有的数之和。如本例中10个片段总和是0.1 + 0.3 + 0.6 + 1.0 + 0.2 + 0.5 + 0.9 + 0.3 + 0.7 + 0.4 = 5.0。  
-
 &emsp;&emsp;套路：Sum+=(double)(N-i)*(double)(i+1)*a[i];  
-
 #### 简单约瑟夫问题
-
 &emsp;&emsp;出列问题：令res = 0;for(int i=2;i<=n;i++){res = (res+偏移量)%i};System.out.println((res+1));  
-
 #### 快速幂
-
 &emsp;&emsp;给出三种求出快速幂的方案，原题为：https://leetcode-cn.com/problems/powx-n/description/  
-
 ```
 class Solution {
     public double myPow(double x, int n) {
@@ -780,15 +786,11 @@ class Solution {
             return half * half * x;
         else
             return half * half / x;
-        
     }
 }
 ```
-
 #### 快速幂取模
-
 &emsp;&emsp;计算a的b次方对c取模，算法正确性未探知  
-
 ```
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -803,11 +805,8 @@ class Solution {
         System.out.println(res);
     }
 ```
-
 #### 递推公式对某个数是否能整除
-
 &emsp;&emsp;多半是有套路的，比如x%y==z?  
-
 #### 完全平方数
 &emsp;&emsp;给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。  
 &emsp;&emsp;涉及四平方和定理  
@@ -831,7 +830,6 @@ class Solution {
     }
 }
 ```
-
 #### 平方数之和
 &emsp;&emsp;给定一个非负整数c，你要判断是否存在两个整数a和b，使得 a*a + b*b = c  
 &emsp;&emsp;单循环，左右坐标试探加减即可  
