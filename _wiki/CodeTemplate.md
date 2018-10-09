@@ -318,6 +318,81 @@ class Arith{
 }
 ```
 
+## 优先队列、大顶堆、小顶堆
+#### Top-K问题
+```
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Random;
+
+//固定容量的优先队列，模拟大顶堆，用于解决求topN小的问题
+public class FixSizedPriorityQueue<E extends Comparable> {
+
+    private PriorityQueue<E> queue; // 优先队列
+    private int maxSize; // 堆的最大容量
+
+    public FixSizedPriorityQueue(int maxSize) {
+        if (maxSize <= 0)
+            throw new IllegalArgumentException();
+        this.maxSize = maxSize;
+        this.queue = new PriorityQueue(maxSize, new Comparator<E>() {
+            public int compare(E o1, E o2) {
+                // 生成最大堆使用o2-o1,生成最小堆使用o1-o2, 并修改 e.compareTo(peek) 比较规则
+                return (o2.compareTo(o1));
+            }
+        });
+    }
+
+    public void add_element(E e) {
+        if (queue.size() < maxSize) { //未达到最大容量，直接添加
+            queue.add(e);
+        } else { // 队列已满
+            E peek = queue.peek();
+            if (e.compareTo(peek) < 0) { //将新元素与当前堆顶元素比较，保留较小的元素
+                queue.poll();
+                queue.add(e);
+            }
+        }
+    }
+
+    public List<E> sortedList() {
+        List<E> list = new ArrayList<E>(queue);
+        Collections.sort(list); // PriorityQueue本身的遍历是无序的，最终需要对队列中的元素进行排序
+        return list;
+    }
+
+    public static void main(String[] args) {
+        FixSizedPriorityQueue pq = new FixSizedPriorityQueue(10);
+        // 生成数据
+        Random random = new Random();
+        int rNum = 0;
+        for (int i = 1; i <= 100; i++) {
+            rNum = random.nextInt(1000);
+            pq.add_element(rNum);
+        }
+
+        System.out.println("PriorityQueue 本身的遍历是无序的：-----------------------------------");
+        Iterable<Integer> iter = new Iterable<Integer>() {
+            public Iterator<Integer> iterator() {
+                return pq.queue.iterator();
+            }
+        };
+        for (Integer item : iter) {
+            System.out.print(item + ", ");
+        }
+        System.out.println();
+        System.out.println("PriorityQueue 排序后的遍历：-----------------------------------");
+        while (!pq.queue.isEmpty()) {
+            System.out.print(pq.queue.poll() + ", ");
+        }
+    }
+}
+```
+
 ## 矩阵问题
 #### 像素翻转
 &emsp;&emsp;题干：有一副由NxN矩阵表示的图像，这里每个像素用一个int表示，请编写一个算法，在不占用额外内存空间的情况下(即不使用缓存矩阵)，将图像顺时针旋转90度。给定一个NxN的矩阵，和矩阵的阶数N,请返回旋转后的NxN矩阵,保证N小于等于500，图像元素小于等于256。  
@@ -1048,7 +1123,26 @@ boolean opt() {
         return false;
 }
 ```
-
+#### 划分数
+&emsp;&emsp;算法竞赛入门，p66(有n个无区别的物品，将它们划分成不超过m组，求出方法数模M的余数)  
+```
+int n, m;
+int dp[n+1][m+1];
+int opt() {
+    dp[0][0] = 1;
+    for(int i=1; i<=m; i++) {
+        for(int j=0; j<=n; j++) {
+            if(j>=i) {
+                dp[i][j] = (dp[i-1][j] + dp[i][j-1]) % M;
+            }
+            else {
+                dp[i][j] = dp[i-1][j];
+            }
+        }
+    }
+    return dp[m][n];
+}
+```
 #### 最长上升子序列 
 
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/longest-increasing-subsequence/description/  
