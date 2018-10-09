@@ -436,7 +436,48 @@ public static boolean same(int x, int y) {
 #### 朋友圈
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/friend-circles/description/  
 ```
-
+class Solution {
+    public int findCircleNum(int[][] M) {
+        int count = M.length;
+        int[] parent = new int[M.length];
+        int[] rank = new int[M.length];
+        for(int i=0; i<parent.length; i++) {
+            parent[i] = i;
+        }
+        for(int i=0; i<parent.length; i++) {
+            for(int j=0; j<=i; j++) {
+                if(M[i][j] == 1) {
+                    count = Union(parent, rank, i, j, count);
+                }
+            }
+        }
+        return count;
+    }
+    
+    public int find(int[] parent, int x) {
+        if(x!=parent[x]) {
+            parent[x] = find(parent, parent[x]);
+        }
+        return parent[x];
+    }
+    
+    public int Union(int[] parent, int[] rank, int x, int y, int count) {
+        x = find(parent, x);
+        y = find(parent, y);
+        if(x==y)
+            return count;
+        if(rank[x] > rank[y])
+            parent[y] = x;
+        else {
+            if(rank[x]==rank[y])
+                rank[y]++;
+            parent[x] = y;
+        }
+        count--;
+        return count;
+    }
+    
+}
 ```
 
 ## 矩阵问题
