@@ -392,6 +392,52 @@ public class FixSizedPriorityQueue<E extends Comparable> {
     }
 }
 ```
+## 并查集
+```
+static int n = 20;
+static int[] parent = new int[n];
+static int[] rank = new int[n];
+
+public static void init(int n) {
+    for(int i=0; i<n; i++) {
+        parent[i] = i;
+        rank[i] = 0;
+    }
+}
+
+public static int find(int x) {
+    if(parent[x] == x) {
+        return x;
+    }
+    else {
+        return parent[x] = find(parent[x]);
+    }
+}
+
+public static void unite(int x, int y) {
+    x = find(x);
+    y = find(y);
+    if(x==y)
+        return;
+    if(rank[x] < rank[y]) {
+        parent[x] = y;
+    }
+    else {
+        parent[y] = x;
+        if(rank[x]==rank[y])
+            rank[x]++;
+    }
+}
+
+public static boolean same(int x, int y) {
+    return find(x) == find(y);
+}
+```
+#### 朋友圈
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/friend-circles/description/  
+```
+
+```
 
 ## 矩阵问题
 #### 像素翻转
