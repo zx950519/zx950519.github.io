@@ -1074,6 +1074,9 @@ class Solution {
                 if(nums[j]<nums[i]&&dp[j]>dp[i]-1) {
                     dp[i] = dp[j] + 1;
                 }
+                //if(nums[j]<nums[i]) {
+                //    dp[i] = Math.max(res, dp[j]+1);
+                //}
             }
             if(dp[i]>res)
                 res = dp[i];
