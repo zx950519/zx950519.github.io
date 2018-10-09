@@ -1019,13 +1019,41 @@ class Solution {
 ```
 
 ## 图论问题
-
 #### 遍历矩阵的每个点的路径长度
-
-&emsp;&emsp;https://www.nowcoder.com/questionTerminal/2c9e3a1f8a2a487ba399af97781bd0cb  
-
+&emsp;&emsp;链接：https://www.nowcoder.com/questionTerminal/2c9e3a1f8a2a487ba399af97781bd0cb  
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fty0an21p0j30ix0kg779.jpg)  
+#### 二分图判断
+&emsp;&emsp;链接：https://leetcode-cn.com/problems/is-graph-bipartite/description/  
+![](http://ww1.sinaimg.cn/large/005L0VzSgy1fw27gh2viaj30tt0dvjs8.jpg)  
+```
+class Solution {
+    int v; // 顶点数
+    int[] color; // 顶点颜色
+    public boolean isBipartite(int[][] graph) {
+        v = graph.length;
+        color = new int[v];
+        for(int i=0; i<v; i++) {
+            if(color[i]==0) {
+                if(!dfs(i, 1, graph)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
+    public boolean dfs(int v, int c, int[][] graph) {
+        color[v] = c; // 把顶点v染成c色
+        for(int i=0; i<graph[v].length; i++) {
+            if(color[graph[v][i]] == c) // 相邻顶点同色返回false
+                return false;
+            if(color[graph[v][i]]==0 && !dfs(graph[v][i], -c, graph)) // 相邻顶点未被染色，染成相反颜色
+                return false;
+        }
+        return true;
+    }
+}
+```
 
 ## 朋友圈、观众分类、水坑、迷宫搜索类问题
 
