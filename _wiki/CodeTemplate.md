@@ -727,9 +727,14 @@ public class Main{
         }
     });
 ```
-
 &emsp;&emsp;黑科技：Java8中引入了getOrDefault(key, 找不大时返回的值)方法。  
 
+## 二分搜索
+#### 割绳子
+&emsp;&emsp;有N条绳子，长度分别为Li,如果从其中割出K条相同长度的绳子，这K条绳子每条最长能有多长？  
+&emsp;&emsp;挑战程序竞赛P141  
+#### 最大化最小值(牛舍问题)
+&emsp;&emsp;
 ## 数学问题
 
 #### 辗转相除法
