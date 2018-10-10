@@ -855,6 +855,42 @@ class Solution {
         System.out.println(res);
     }
 ```
+#### 矩阵快速幂
+```
+public static long[][] mutiply(int k, int n, long[][] A){
+    long [][] res = new long[n][n];
+    for(int i = 0 ; i < res.length ;i++){
+        for(int j = 0 ; j< res[i].length ;j++){
+            if(i==j){
+                res[i][j] = 1;
+            }else{
+                res[i][j] = 0;
+            }
+        }
+    }
+    // 求A^156,而156(10)=10011100(2) 也就有A^156=>(A^4)*(A^8)*(A^16)*(A^128)
+    while(k!=0){
+        if((k&1)==1)
+            res = func(res,A);
+        // 移位，参考上面156的例子
+        k>>=1;
+        A = func(A,A);
+    }
+    return res;
+}
+// 矩阵乘法
+public static long[][] func(long[][] A,long[][] B){
+    long res[][] = new long[A.length][B.length];
+    for(int i = 0 ; i < res.length ;i++){
+        for(int j = 0 ; j< res[i].length ;j++){
+            for(int k = 0 ; k < A[0].length ;k++){
+                res[i][j] += A[i][k]*B[k][j];
+            }
+        }
+    }
+    return res;
+}
+```
 #### 递推公式对某个数是否能整除
 &emsp;&emsp;多半是有套路的，比如x%y==z?  
 #### 完全平方数
