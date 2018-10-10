@@ -763,6 +763,8 @@ public static int sieve(int n) {
     return p;
 }
 ```
+#### 模运算性质&法则
+&emsp;&emsp;参考：https://blog.csdn.net/m0_37154839/article/details/78263267
 #### 拓展欧几里得算法
 ```
 public class Main {
