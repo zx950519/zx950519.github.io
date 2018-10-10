@@ -891,6 +891,53 @@ public static long[][] func(long[][] A,long[][] B){
     return res;
 }
 ```
+#### 斐波那契额矩阵快速幂
+```
+public class Main {
+    public static void main(String[] args) {
+        int n = 4;
+        int[][] m = fb(n);
+        System.out.println(m[0][1]);
+    }
+    // 关联矩阵
+    private static final int[][] UNIT = { { 1, 1 }, { 1, 0 } };
+    // 全0矩阵
+    private static final int[][] ZERO = { { 0, 0 }, { 0, 0 } };
+    public static int[][] fb(int n) {
+        if (n == 0) {
+            return ZERO;
+        }
+        if (n == 1) {
+            return UNIT;
+        }		
+        // n是奇数
+        if ((n & 1) == 0) {
+            int[][] matrix = fb(n >> 1);
+            return matrixMultiply(matrix, matrix);
+        }		
+        // n是偶数
+        int[][] matrix = fb((n - 1) >> 1);
+        return matrixMultiply(matrixMultiply(matrix, matrix), UNIT);
+    }
+
+
+    // 矩阵乘法
+    public static int[][] matrixMultiply(int[][] m, int[][] n) {
+        int rows = m.length;
+        int cols = n[0].length;
+        int[][] r = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                r[i][j] = 0;
+                for (int k = 0; k < m[i].length; k++) {
+                    r[i][j] += m[i][k] * n[k][j];
+                }
+            }
+        }
+        return r;
+    }
+}
+```
 #### 递推公式对某个数是否能整除
 &emsp;&emsp;多半是有套路的，比如x%y==z?  
 #### 完全平方数
