@@ -740,6 +740,29 @@ int gcd(int a, int b) {
     return gcd(b, a%b);
 }
 ```
+#### 埃氏筛
+```
+public static int sieve(int n) {
+    boolean[] is_prime = new boolean[n+1];
+    prime = new int[n+1];
+    int p = 0;
+    for(int i=0; i<=n; i++)
+        is_prime[i] = true;
+    is_prime[0] = false;
+    is_prime[1] = false;
+    for(int i=2; i<=n; i++) {
+        if(is_prime[i]) {
+            prime[p++] = i;
+            for(int j=2*i; j<=n; j+=i)
+                is_prime[j] = false;
+        }
+    }
+    for(int i=0; i<p; i++) {
+        System.out.println(prime[i]);
+    }
+    return p;
+}
+```
 #### 拓展欧几里得算法
 ```
 public class Main {
