@@ -159,10 +159,8 @@ class InputReader {
 
 - 2.String 构造方法是完全可预知的：写入 newBigDecimal("0.1") 将创建一个 BigDecimal，它正好等于预期的 0.1。因此，比较而言，通常建议优先使用String构造方法。  
 
-&emsp;&emsp;当必须使用double构造时，可以使用String进行过桥，避免丢失精度，例如：BigDecimal b1 = new BigDecimal(Double.toString(v1));
-  
+&emsp;&emsp;当必须使用double构造时，可以使用String进行过桥，避免丢失精度，例如：BigDecimal b1 = new BigDecimal(Double.toString(v1));  
 加减乘除  
-
 ```
     public BigDecimal add(BigDecimal value);                        //加法
 
@@ -172,9 +170,7 @@ class InputReader {
 
     public BigDecimal divide(BigDecimal value);                     //除法
 ```  
-
 &emsp;&emsp;值得注意的是对于除法，如果不能整除，运行时会出现java.lang.ArithmeticException异常，解决办法是添加额外的参数：public BigDecimal divide(BigDecimal divisor, int scale, int roundingMode)。其中第一参数表示除数，第二个参数表示小数点后保留位数，第三个参数表示舍入模式，只有在作除法运算或四舍五入时才用到舍入模式，有下面这几种：  
-
 - ROUND_CEILING        //向正无穷方向舍入
 - ROUND_DOWN           //向零方向舍入
 - ROUND_FLOOR          //向负无穷方向舍入
@@ -183,13 +179,9 @@ class InputReader {
 - ROUND_HALF_UP        //向（距离）最近的一边舍入，除非两边（的距离）是相等,如果是这样，向上舍入, 1.55保留一位小数结果为1.6
 - ROUND_UNNECESSARY    //计算结果是精确的，不需要舍入模式
 - ROUND_UP             //向远离0的方向舍入  
-
 &emsp;&emsp;例如，常见的四舍五入为：System.out.println("a / b =" + a.divide(b, 10, BigDecimal.ROUND_HALF_UP));  
-
 &emsp;&emsp;此外，四则运算后会产生新的对象，即BigDecimal对象不可变！  
-
 截断操作  
-
 &emsp;&emsp;需要对BigDecimal进行截断和四舍五入可用setScale方法，例如：  
 
 ```
@@ -206,15 +198,12 @@ class InputReader {
     }
 ```
 常见变量  
-
 ```
     BigDecimal zero = BigDecimal.ZERO;  
     BigDecimal one = BigDecimal.ONE;  
     BigDecimal ten = BigDecimal.TEN; 
 ```  
-
 比较操作  
-
 ```
     BigDecimal one = BigDecimal.valueOf(1);  
     BigDecimal two = BigDecimal.valueOf(2);  
@@ -223,17 +212,11 @@ class InputReader {
     int i2 = two.compareTo(two);//0  
     int i3 = three.compareTo(two);//1  
 ```  
-
 完整API  
-
 &emsp;&emsp;地址：http://www.javaweb.cc/help/JavaAPI1.6/java/math/class-use/BigDecimal.html  
-  
 &emsp;&emsp;地址：https://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html
-
 源码分析  
-
 &emsp;&emsp;有待补充  
-
 #### 解题模板  
 
 ```
@@ -734,7 +717,9 @@ public class Main{
 &emsp;&emsp;有N条绳子，长度分别为Li,如果从其中割出K条相同长度的绳子，这K条绳子每条最长能有多长？  
 &emsp;&emsp;挑战程序竞赛P141  
 #### 最大化最小值(牛舍问题)
-&emsp;&emsp;
+&emsp;&emsp;挑战程序竞赛P142  
+#### 最大化平均值
+&emsp;&emsp;挑战程序竞赛P143
 ## 数学问题
 
 #### 辗转相除法
