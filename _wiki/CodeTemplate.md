@@ -2371,8 +2371,9 @@ public class Main {
 }
 ```
 ## 奇淫技巧
-#### 尺取法模板
+#### 尺取法
 ```
+// 数列
 static int n = 10;
 static int S = 15;
 static int[] a = {5, 1, 3, 5, 10, 7, 4, 9, 2, 8};
@@ -2398,6 +2399,48 @@ public static void solve() {
     }
     if(res > n) {
         res = 0;
+    }
+    System.out.println(res);
+}
+```
+```
+// n个数，求最小区间覆盖着n个数中所有的不相同的数字
+static int N = 1000008 ;
+static int[] a = new int[N] ;
+static Set<Integer> set = new HashSet<Integer>() ;
+static Map<Integer , Integer> map = new HashMap<Integer, Integer>() ;
+
+static void solve() {
+    Scanner in = new Scanner(System.in);
+    int n = in.nextInt() , size = 0 ;
+    set.clear() ;
+    map.clear() ;
+    for(int i = 0 ; i < n ; i++){
+        set.add(a[i] = in.nextInt() ) ;
+    }
+    size = set.size() ;
+
+    int start = 0 , end = 0 , sum = 0 ;
+    int res = n ;
+    for(;;){
+        while(end < n && sum < size){
+            Integer cnt = map.get(a[end]) ;
+            if(cnt == null){
+                sum++ ;
+                map.put(a[end] , 1) ;
+            }
+            else map.put(a[end] , cnt+1) ;
+            end++ ;
+        }
+        if(sum < size) break ;
+        res = Math.min(end - start , res) ;
+        int cnt = map.get(a[start]) ;
+        if(cnt == 1){
+            map.remove(a[start]) ;
+            sum-- ;
+        }
+        else map.put(a[start] , cnt-1) ;
+        start++ ;
     }
     System.out.println(res);
 }
