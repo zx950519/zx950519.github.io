@@ -2491,3 +2491,46 @@ static int N = 7;
         System.out.println("K="+K+" M="+M);
     }
 ```
+#### 弹性碰撞
+```
+public class Main {
+    public static void main(String[] args) {
+        solve();
+    }
+    static int N = 2;
+    static int H = 10;
+    static int R = 10;
+    static int T = 100;
+    static double g = 10.0;
+    static double[] y = new double[N];
+    static double calc(int T) {
+        if(T<0)
+            return H;
+        double t = Math.sqrt(2*H/g);
+        int k = (int)(T/t);
+        if(k%2==0) {
+            double d = T - k * t;
+            return H - g*d*d/2;
+        }
+        else {
+            double d = k * t + t - T;
+            return H - g*d*d/2;
+        }
+    }
+    static void solve() {
+        for(int i=0; i<N; i++) {
+            y[i] = calc(T-i);
+        }
+        Arrays.sort(y);
+        for(int i=0; i<N; i++) {
+            DecimalFormat df = new DecimalFormat("#.00");
+
+            System.out.print(df.format(y[i]+2*R*i/100.0)+" ");
+            if(i+1==N)
+                System.out.print("\n");
+            else
+                System.out.print(" ");
+        }
+    }
+}
+```
