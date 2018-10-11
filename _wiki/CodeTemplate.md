@@ -2370,3 +2370,35 @@ public class Main {
     }
 }
 ```
+## 奇淫技巧
+#### 尺取法模板
+```
+static int n = 10;
+static int S = 15;
+static int[] a = {5, 1, 3, 5, 10, 7, 4, 9, 2, 8};
+static int[] sum = new int[n+1];
+public static void solve() {
+    int res = n + 1;
+    int s = 0;
+    int t = 0;
+    int sum = 0;
+    for(;;) {
+        while (t<n && sum <S) {
+            sum += a[t++];
+        }
+        if(sum < S)
+            break;
+        // 取本次窗口长度与最优值最小
+        res = Math.min(res, t-s);
+        System.out.println("本次窗口下标："+s+"->"+t+" 累加和："+sum);
+        System.out.println("减掉下标："+s+"的内容："+a[s]);
+        System.out.println("当前最优值："+res);
+        sum -= a[s++];
+
+    }
+    if(res > n) {
+        res = 0;
+    }
+    System.out.println(res);
+}
+```
