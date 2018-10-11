@@ -2446,6 +2446,7 @@ static void solve() {
 }
 ```
 #### 开关问题
+&emsp;&emsp;挑战程序竞赛P150  
 ```
 static int N = 7;
     static int[] dir = {1, 1, 0, 1, 0, 1, 1};
@@ -2492,6 +2493,7 @@ static int N = 7;
     }
 ```
 #### 弹性碰撞
+&emsp;&emsp;挑战程序竞赛P158  
 ```
 public class Main {
     public static void main(String[] args) {
