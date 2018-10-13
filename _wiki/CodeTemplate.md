@@ -735,15 +735,11 @@ public class Main{
 ```
 
 ## 字典Map的使用
-
 - 1.HashMap
 - 2.LinkedHashMap
 - 3.TreeMap
-
 &emsp;&emsp;HashMap最基本的Map，遍历时的顺序与插入顺序无关  
-
 &emsp;&emsp;LinkedHashMap是特殊的一种Map，遍历时的顺序与插入顺序相同  
-
 &emsp;&emsp;TreeMap默认是按照key的字典序升序排列，如果想降序的话按照如下操作:  
 ```
     Map<Integer, Integer> map = new TreeMap<Integer, Integer>(new Comparator<Integer>(){
@@ -763,38 +759,49 @@ public class Main{
 ## 二分搜索
 #### Java版lower_bound&upper_bound
 ```
-public static int lower_Bound(int[] nums,int l,int r,int v){
-    for(int i=l; i<r; i++) {
-        if(nums[i]==v)
-            break;
-        if(i==r-1)
-            return -1;
+public static int binary_search(int[] nums, int l, int r, int v) {
+    while (l<r) {
+        int m = (l+r)/2;
+        if(nums[m]==v){
+            return m;
+        }
+        else if(nums[m]>v) {
+            r = m-1;
+        }
+        else {
+            l = m+1;
+        }
     }
+    if(nums[l]==v)
+        return l;
+    else
+        return -1;
+}
+public static int lower_Bound(int[] nums,int l,int r,int v){
     while(l<r){
-        int mid = l + (r - l) / 2;
+        int mid = (r + l) / 2;
         if(nums[mid] >= v)
             r = mid;
         else if(nums[mid] < v)
             l = mid+1;
     }
-    return l;
+    if(nums[l]==v)
+        return l;
+    else
+        return -1;
 }
-
 public static int upper_Bound(int[] nums,int l,int r,int v){
-    for(int i=l; i<r; i++) {
-        if(nums[i]==v)
-            break;
-        if(i==r-1)
-            return -1;
-    }
     while(l<r){
-        int mid = l + (r - l) / 2;
+        int mid = (r + l) / 2;
         if(nums[mid] <= v)
             l = mid+1;
         else if(nums[mid] > v)
             r = mid;
     }
-    return l-1;
+    if(nums[l-1]==v)
+        return l-1;
+    else
+        return -1;
 }
 ```
 #### 割绳子
