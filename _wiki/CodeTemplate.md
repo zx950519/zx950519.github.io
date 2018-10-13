@@ -810,9 +810,113 @@ public static int upper_Bound(int[] nums,int l,int r,int v){
 #### 最大化最小值(牛舍问题)
 &emsp;&emsp;挑战程序竞赛P142  
 #### 最大化平均值
-&emsp;&emsp;挑战程序竞赛P143
-## 数学问题
+&emsp;&emsp;挑战程序竞赛P143  
+#### 折半枚举(双向搜索)
+&emsp;&emsp;给定四个数列以及目标数，求和为零的组合数(挑战程序竞赛p160)  
+```
+static int[] A = {-45, -41, -36, -36, -32, 26};
+static int[] B = {22, -27, 53, 30, -38, -54};
+static int[] C = {42, 56, -37, -75, -10, -6};
+static int[] D = {-16, 30, 77, -46, 62, 45};
+static int n = 6;
+static int[] CD = new int[n*n];
+static Map<Integer, String> map = new LinkedHashMap<>();
+static List<String> li = new ArrayList<>();
+public static void solve() {
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<n; j++) {
+            CD[i*n+j] = C[i] + D[j];
+            if(map.getOrDefault(C[i] + D[j], "").equals("")) {
+                map.put(C[i] + D[j], i+","+j+";");
+            }
+            else {
+                map.put(C[i] + D[j], map.get(C[i] + D[j])+i+","+j+";");
+            }
+        }
+    }
+    Arrays.sort(CD);
+    long res = 0;
+    for(int i=0; i<n; i++) {
+        for (int j = 0; j < n; j++) {
+            int cd = -(A[i] + B[j]);
+            if(binary_search(CD, 0, CD.length, cd)==-1)
+                continue;
+            int up = upper_Bound(CD, 0, CD.length, cd);
+            int low = lower_Bound(CD, 0, CD.length, cd);
+            if(up-low==0) {
+                res++;
+                String tmp = map.get(cd);
+                tmp+=i+","+j;
+                li.add(tmp);
+            }
+            else {
+                res+=up-low;
+                String[] tmp = map.get(cd).split(";");
+                for(int k=0; k<tmp.length; k++) {
+                    String apk = tmp[i]  + i + "," + j;
+                    li.add(apk);
+                }
+            }
 
+        }
+    }
+    System.out.println(res);
+    for(String sp: li){
+        String[] half = sp.split(";");
+        int c = Integer.parseInt(half[0].split(",")[0]);
+        int d = Integer.parseInt(half[0].split(",")[1]);
+        int a = Integer.parseInt(half[1].split(",")[0]);
+        int b = Integer.parseInt(half[1].split(",")[1]);
+        System.out.println(A[a]+","+B[b]+","+C[c]+","+D[d]+" =0");
+    }
+}
+public static int binary_search(int[] nums, int l, int r, int v) {
+    while (l<r) {
+        int m = (l+r)/2;
+        if(nums[m]==v){
+            return m;
+        }
+        else if(nums[m]>v) {
+            r = m-1;
+        }
+        else {
+            l = m+1;
+        }
+    }
+    if(nums[l]==v)
+        return l;
+    else
+        return -1;
+}
+public static int lower_Bound(int[] nums,int l,int r,int v){
+    while(l<r){
+        int mid = (r + l) / 2;
+        if(nums[mid] >= v)
+            r = mid;
+        else if(nums[mid] < v)
+            l = mid+1;
+    }
+    if(nums[l]==v)
+        return l;
+    else
+        return -1;
+}
+public static int upper_Bound(int[] nums,int l,int r,int v){
+    while(l<r){
+        int mid = (r + l) / 2;
+        if(nums[mid] <= v)
+            l = mid+1;
+        else if(nums[mid] > v)
+            r = mid;
+    }
+    if(nums[l-1]==v)
+        return l-1;
+    else
+        return -1;
+}
+```
+
+## 数学问题
 #### 辗转相除法
 ```
 int gcd(int a, int b) {
