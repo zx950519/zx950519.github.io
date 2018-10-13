@@ -7,7 +7,6 @@ keywords: Java
 ---
 
 ## 输入问题
-
 &emsp;&emsp;Codeforces著名世界级选手Petr大爷写的Java输入内部类:  
 ```
 class InputReader {
@@ -38,9 +37,7 @@ class InputReader {
 ```
 
 ## 输出问题
-
 &emsp;&emsp;文档：https://www.cs.colostate.edu/~cs160/.Summer16/resources/Java_printf_method_quick_reference.pdf  
-
 &emsp;&emsp;常见输出格式：  
 ```
     // 定义一些变量，用来格式化输出。
@@ -74,26 +71,27 @@ class InputReader {
     System.out.printf("字符串：%2$s，%1$d的十六进制数：%1$#x", i, s);
 ```
 ```
-    345.678000
-       345.68
-      +345.68
-    345.6780 
-    +345.678 
-    1234
-    2322
-    4d2
-    0x4d2
-    你好！
-    输出一个浮点数：345.678000，一个整数：1234，一个字符串：你好！
-    字符串：你好！，1234的十六进制数：0x4d2
+345.678000
+345.68
++345.68
+345.6780 
++345.678 
+1234
+2322
+4d2
+0x4d2
+你好！
+输出一个浮点数：345.678000，一个整数：1234，一个字符串：你好！
+字符串：你好！，1234的十六进制数：0x4d2
 ```
-
+## JAVA-API
+```
+1.ArrayList去重：List<Integer> unipue = list.stream().distinct().collect(Collectors.toList());
+2.
+```
 ## 精度问题
-
 #### 问题分析  
-
 &emsp;&emsp;丫的，前两天做题发现了这么个奇葩的问题，代码如下：  
-
 ```
     public class Main {
 
@@ -114,15 +112,10 @@ class InputReader {
 ```  
 &emsp;&emsp;尤其是最下面那组4.1-1.1，解题的一个步骤是要求两个数(double类型)差的绝对值，然后向下取整，我直接用Math.floor(Math.abs(4.1-1.1));
 发现结果竟然等于2，后来经过网上搜集资料，发现Java在精度上是有问题的！  
-
 理论解释  
-
 &emsp;&emsp;借用《Effactive Java》书中的话，float和double类型的主要设计目标是为了科学计算和工程计算。他们执行二进制浮点运算，这是为了在广域数值范围上提供较为精确的快速近似计算而精心设计的。然而，它们没有提供完全精确的结果，所以不应该被用于要求精确结果的场合。但是，商业计算往往要求结果精确，这时候BigDecimal就派上大用场了。  
-
 &emsp;&emsp;在学习计算机组成原理的时候我们应该都对浮点数有一定的了解，看下这个演示的例子就知道为啥会出现丢失精度的问题：https://www.zhihu.com/question/42024389  
-
 解决办法  
-
 &emsp;&emsp;使用Java中的BigDecimal，主要有如下几种构造方式：  
 ```
     1.public BigDecimal(double val)    //将double表示形式转换为BigDecimal, 不建议使用
@@ -131,9 +124,7 @@ class InputReader {
 
     3.public BigDecimal(String val)　　//将String表示形式转换成BigDecimal
 ```  
-
 &emsp;&emsp;为什么不推荐使用double构造BigDecimal对象呢，看下面的实例：  
-
 ```
     import java.math.BigDecimal;
     public class Main {
@@ -152,13 +143,9 @@ class InputReader {
 
     }
 ```
-
 &emsp;&emsp;为什么会出现这种情况呢？  
-
 - 1.参数类型为double的构造方法的结果有一定的不可预知性。有人可能认为在Java中写入newBigDecimal(0.1)所创建的BigDecimal正好等于 0.1（非标度值 1，其标度为 1），但是它实际上等于0.1000000000000000055511151231257827021181583404541015625。这是因为0.1无法准确地表示为 double（或者说对于该情况，不能表示为任何有限长度的二进制小数）。这样，传入到构造方法的值不会正好等于 0.1（虽然表面上等于该值）。  
-
 - 2.String 构造方法是完全可预知的：写入 newBigDecimal("0.1") 将创建一个 BigDecimal，它正好等于预期的 0.1。因此，比较而言，通常建议优先使用String构造方法。  
-
 &emsp;&emsp;当必须使用double构造时，可以使用String进行过桥，避免丢失精度，例如：BigDecimal b1 = new BigDecimal(Double.toString(v1));  
 加减乘除  
 ```
