@@ -1174,7 +1174,6 @@ class Solution {
 ```
 
 ## 日期问题
-
 #### 给定年月日判断是星期几  
 ```
 1.公元一年一月一日为星期一(现在世界各国通用一星期七天的制度。这个制度最早由君士坦丁大帝[Constantine the Great]制定。他在公元321年3月7日正式宣布7天为1周，这个制度一直沿用至今)。
@@ -1197,25 +1196,18 @@ class Solution {
 ```
 
 ## 递推问题
-
 #### 全错排公式
-
 ```
 F(1) = 0;F(2) = 1; F(n) = (n-1)*(F(n-2) + F(n-1))//错排公式为F(n)=n!(1/2!-1/3!+…..+(-1)^n/n!)
 ```
-
 #### 部分错排公式(新郎问题：n个人中m个错误的情况数量)
-
 ```
 D(m, n) = F(m) * C(m, n);其中F(m)是全错排数量,C(m, n)是组合数格式为C(up, low)
 ```
 
 ## 数论问题
-
 #### 组合数、排列数求解模板及基本公式变形
-
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1ftwvodb6eej30sg0hzwf6.jpg)  
-
 &emsp;&emsp;其他性质、定理传送门
 
 - 1.https://blog.csdn.net/litble/article/details/75913032
@@ -1246,9 +1238,7 @@ D(m, n) = F(m) * C(m, n);其中F(m)是全错排数量,C(m, n)是组合数格式�
 ```
 
 ## 字符串问题
-
 #### 一些基本操作
-
 ```
     去除空格:s.replaceAll(" ","");
     大小写转换:s.toLowerCase();s.toUpperCase();
@@ -1258,9 +1248,7 @@ D(m, n) = F(m) * C(m, n);其中F(m)是全错排数量,C(m, n)是组合数格式�
 ```
 
 #### 无重复字符的最长子串长度
-
 &emsp;&emsp;算法运行一遍即可了解过程  
-
 ```
 public class Main {
 
@@ -1526,11 +1514,15 @@ class Solution {
     }
 }
 ```
+
+## 贪心问题
+#### 超大背包
+&emsp;&emsp;挑战程序竞赛p162  
+
 ## DP问题
 
 #### 不错的博客讲解
 - https://blog.csdn.net/wangdd_199326/article/details/76464333  
-
 #### 多重部分和
 &emsp;&emsp;算法竞赛入门，p62(有n钟不同大小的数字ai,每种个，mi个,判断是否可以组合成指定数k)  
 ```
@@ -1575,13 +1567,9 @@ int opt() {
 }
 ```
 #### 最长上升子序列 
-
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/longest-increasing-subsequence/description/  
-
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fubu8vgkf3j30o408aglw.jpg)  
-
 &emsp;&emsp;经典的DP问题之一，解法很多：  
-
 ```
 // O(n*n)的解法，逻辑很简单，需要注意的是dp[j]>dp[i]-1这步判断，如果不加，会重复加上一些不符合要求的数
 class Solution {
@@ -1614,17 +1602,11 @@ class Solution {
 ```
 // O(n*log(n))的解法
 ```
-
 #### 最长公共子序列(LCS)
-
 &emsp;&emsp;经典的DP问题之一,可以采用打表的方式或者递归解决，状态转移方程如下：  
-
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fud189qec7j30j30j4jup.jpg)  
-
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fud1f2ms99j30io02vjrv.jpg)  
-
 &emsp;&emsp;链接：有待补充  
-
 ```
 // 解法1采用打表法 printLCS方法利用矩阵print将实际的子序列依次打印出来
     public static int LCS(char[] a, char[] b) {
@@ -1670,7 +1652,6 @@ class Solution {
         }
     }
 ```
-
 ```
 // 解法2，利用递归求解
     public static int LCS2(char[] a, char[] b, int i, int j) {
@@ -1682,15 +1663,10 @@ class Solution {
             return Math.max(LCS2(a, b, i+1, j), LCS2(a, b, i, j+1));
     }
 ```
-
 #### 不同路径
-
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/unique-paths/description/  
-
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fu0cp794psj30no0idq3o.jpg)  
-
-&emsp;&emsp;典型的数组型DP问题，开二维数组遍历即可，递推公式为:d[i][j] = data[i-1][j] + data[i][j-1];
-
+&emsp;&emsp;典型的数组型DP问题，开二维数组遍历即可，递推公式为:d[i][j] = data[i-1][j] + data[i][j-1];  
 ```
 class Solution {
     public int uniquePaths(int m, int n) {
@@ -1711,7 +1687,6 @@ class Solution {
 }
 ```
 &emsp;&emsp;其他解法：实际上机器人总共走了m + n - 2步，其中m - 1步向下走，n - 1步向右走，那么总共不同的方法个数就相当于在步数里面m - 1和n - 1中较小的那个数的取法，实际上是一道组合数的问题。  
-
 ```
 import java.util.*;
 
@@ -1730,13 +1705,9 @@ class Solution {
 }
 ```
 #### 三角形最小路径和
-
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/triangle/description/  
-
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fu8d99k228j30o60aewev.jpg)  
-
 &emsp;&emsp;矩阵类DP问题：  
-
 ```
 class Solution {
     public int minimumTotal(List<List<Integer>> triangle) {
@@ -1767,13 +1738,9 @@ class Solution {
     }
 }
 ```
-
 #### 最大正方形 
-
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/maximal-square/description/  
-
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fu8fnlaay6j30of097aa6.jpg)  
-
 ```
 class Solution {
     public static int maximalSquare(char[][] matrix) {
@@ -1831,13 +1798,9 @@ class Solution {
 }
 ```
 #### 最大子序和
-
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/maximum-subarray/description/  
-
 ![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9f8gb932j30od07st90.jpg)  
-
-&emsp;&emsp;一维数组的DP问题，状态转移方程为:f(x) = Max(f(x), f(x-1)+f(x))
-
+&emsp;&emsp;一维数组的DP问题，状态转移方程为:f(x) = Max(f(x), f(x-1)+f(x))  
 ```
 class Solution {
     public int maxSubArray(int[] nums) {
@@ -1855,16 +1818,10 @@ class Solution {
     }
 }
 ```
-
 #### 最小路径和
-
 &emsp;&emsp;链接:https://leetcode-cn.com/problems/minimum-path-sum/description/  
-
 ![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9fqqw3hoj30o608ct8u.jpg)  
-
 &emsp;&emsp;二维数组的DP问题，注意边界判断，状态转移方程为f[i][j] = f[i][j] + Math.min(f[i][j-1], f[i-1][j])  
-
-
 ```
 class Solution {
     public int minPathSum(int[][] grid) {
@@ -1902,15 +1859,10 @@ class Solution {
     }
 }
 ```
-
 #### 使用最小花费爬楼梯
-
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/min-cost-climbing-stairs/description/  
-
 ![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9gjwa83zj30o40cd74z.jpg)  
-
 &emsp;&emsp;一维数组DP问题，有点小坑。值得注意的是，需要新开一个长度比cost大1的新数组dp，令dp[0]=cost[0],dp[1]=cost[1],然后运行状态转移方程dp[i]=cost[i]+min(dp[i-1], dp[i-2]),此外需要额外注意的是cost[cost.length]=0。  
-
 ```
 class Solution {
     public int minCostClimbingStairs(int[] cost) {
@@ -1931,15 +1883,10 @@ class Solution {
     }
 }
 ```
-
 #### 打家劫舍
-
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/house-robber/description/  
-
 ![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9hutgtnvj30o60as0t9.jpg)  
-
 &emsp;&emsp;一维数组DP问题，坑比较多。需要额外对数组长度为3及其以下的情况剪枝，当长度为4以上才可以进行正常的迭代。新开一个数组dp，状态转移方程为：dp[i] = nums[i]+max(dp[i-2], dp[i-3])  
-
 ```
 class Solution {
     public int rob(int[] nums) {
@@ -1965,15 +1912,10 @@ class Solution {
     }
 }
 ```
-
 #### 整数拆分
-
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/integer-break/description/  
-
 ![](http://ww1.sinaimg.cn/large/005L0VzSly1fu9inrre5bj30oh08q3yu.jpg)  
-
 &emsp;&emsp;一维数组DP问题，注意2、3的特殊情况，从4开始可以开始迭代。状态转移方程形式不同，参考代码即可。  
-
 ```
 class Solution {
     public int integerBreak(int n) {
@@ -2000,15 +1942,10 @@ class Solution {
     }
 }
 ```
-
 #### 买卖股票的最佳时机
-
 &emsp;&emsp;链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/description/  
-
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fuannswa68j30o10abaaf.jpg)  
-
 &emsp;&emsp;一维数组DP问题，可用暴力可解决。设一个变量min保存最低值，另一个变量res保存当前最优差值。  
-
 ```
 class Solution {
     public int maxProfit(int[] prices) {
@@ -2045,12 +1982,9 @@ class Solution {
     }
 }
 ```
-
 #### 完全平方数
 &emsp;&emsp;链接:https://leetcode-cn.com/problems/perfect-squares/description/  
-
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fvamcptsb9j30q909c0sx.jpg)  
-
 ```
 class Solution {
     public int numSquares(int n) {
@@ -2067,9 +2001,7 @@ class Solution {
     }
 }
 ```
-
 ## 二叉树问题
-
 #### 如何判断二叉树b是否是二叉树a的子树
 ```
 public boolean isSubTree(TreeNode root1,TreeNode root2) {
@@ -2083,7 +2015,6 @@ public boolean isSubTree(TreeNode root1,TreeNode root2) {
         return isSubTree(root1.left, root2.left) && isSubTree(root1.right, root2.right);
 }
 ```
-
 #### 求二叉树深度
 ```
 import java.util.*;
@@ -2095,7 +2026,6 @@ public class Solution {
         return 1 + Math.max(TreeDepth(root.left), TreeDepth(root.right));
     }
 }
-
 public class Solution {
     public int TreeDepth(TreeNode root) {
             if(root==null){
@@ -2107,7 +2037,6 @@ public class Solution {
     }
 }
 ```
-
 #### 判断二叉树是否对称
 题目描述
 请实现一个函数，用来判断一颗二叉树是不是对称的。注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
