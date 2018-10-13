@@ -546,7 +546,6 @@ class Transformation {
 
 ## 位运算问题
 &emsp;&emsp;一些使用位运算的奇淫技巧  
-
 #### 判断奇偶
 &emsp;&emsp;用if((a & 1) == 0)代替if (a % 2 == 0)  
 #### 交换两数
@@ -565,6 +564,55 @@ class Transformation {
     或
     int j = a >> 31;
     System.out.println((a ^ j) - j);
+```
+#### 位运算枚举数组子集
+```
+public static ArrayList<ArrayList<Integer>> getSubset(ArrayList<Integer> L) {
+    if (L.size() > 0) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        for (int i = 0; i < Math.pow(2, L.size()); i++) {   // 集合子集个数=2的该集合长度的乘方
+            ArrayList<Integer> subSet = new ArrayList<>();
+            int index = i;// 索引从0一直到2的集合长度的乘方-1
+            for (int j = 0; j < L.size(); j++) {
+                // 通过逐一位移，判断索引那一位是1，如果是，再添加此项
+                if ((index & 1) == 1) {// 位与运算，判断最后一位是否为1
+                    subSet.add(L.get(j));
+                }
+                index >>= 1;// 索引右移一位
+            }
+            result.add(subSet); // 把子集存储起来
+        }
+        return result;
+    } else {
+        return null;
+    }
+}
+```
+#### 位运算枚举符合特定条件的数组子集
+```
+public static ArrayList<ArrayList<Integer>> getSubset(ArrayList<Integer> L, int target) {
+    if (L.size() > 0) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        for (int i = 0; i < Math.pow(2, L.size()); i++) {   // 集合子集个数=2的该集合长度的乘方
+            ArrayList<Integer> subSet = new ArrayList<>();
+            int index = i;// 索引从0一直到2的集合长度的乘方-1
+            int sum = 0;
+            for (int j = 0; j < L.size(); j++) {
+                // 通过逐一位移，判断索引那一位是1，如果是，再添加此项
+                if ((index & 1) == 1) {// 位与运算，判断最后一位是否为1
+                    subSet.add(L.get(j));
+                    sum += L.get(j);
+                }
+                index >>= 1;// 索引右移一位
+            }
+            if(sum == target)
+                result.add(subSet); // 把子集存储起来
+        }
+        return result;
+    } else {
+        return null;
+    }
+}
 ```
 #### 其他技巧
 ```
