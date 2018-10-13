@@ -671,7 +671,6 @@ public static ArrayList<ArrayList<Integer>> getSubset(ArrayList<Integer> L, int 
 ```
 
 ## 进制转换
-
 &emsp;&emsp;任意进制间的转换，使用10进制进行桥接即可。利用了StringBuilder、取余等操作即可，实现过程如下：
 ```
 import java.util.*;
