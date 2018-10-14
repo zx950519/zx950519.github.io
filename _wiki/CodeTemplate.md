@@ -656,8 +656,15 @@ public static ArrayList<ArrayList<Integer>> getSubset(ArrayList<Integer> L, int 
     // 19. 从低位到高位,将n的第m位置为0
     System.out.println(n & ~(0<<(m-1)));
 ```
-## 线段树
 
+## 线段树
+&emsp;&emsp;如果问题带有区间操作，或者可以转化成区间操作，可以尝试往线段树方向考虑。  
+&emsp;&emsp;当我们分析出问题是一些列区间操作时：
+-1.对区间的一个点的值进行修改
+-2.对区间的一段值进行统一的修改
+-3.询问区间的和
+-4.询问区间的最大值、最小值
+&emsp;&emsp;树型实现：  
 ```
 public class Main {
     public static void main(String args[]) throws Exception{
@@ -707,7 +714,6 @@ public class Main {
         return res;
     }
 }
-
 class SegmentTreeNode {
     public int start, end;
     public int max, min, sum;
@@ -721,6 +727,65 @@ class SegmentTreeNode {
         this.sum = basic;
         this.left = null;
         this.right = null;
+    }
+}
+```
+&emsp;&emsp;数组实现  
+```
+public class Main {
+    public static int[] seg;
+    public static int n;
+    public static void main(String args[]) throws Exception{
+        int[] nums = {1, 4, 2, 3};
+        n = nums.length;
+        if(n>0) {
+            seg = new int[4*n];
+            build(nums, 0, n-1, 0);
+        }
+        update(2, 11);
+        for(int i=0; i<seg.length; i++)
+            System.out.print(seg[i]+" ");
+        System.out.println();
+        System.out.println(sum(2, 3));
+    }
+    public static void build(int[] nums, int start, int end, int idx) {
+        if(start==end)
+            seg[idx] = nums[start];
+        else {
+            int mid = (start+end) / 2;
+            build(nums, start, mid, 2*idx+1);
+            build(nums, mid+1, end, 2*idx+2);
+            seg[idx] = seg[2*idx+1] + seg[2*idx+2];
+        }
+    }
+
+    public static void update(int i, int val) {
+        update(0, n-1, i, val, 0);
+    }
+    public static void update(int start, int end, int i, int val, int idx) {
+        if(start==end) {
+            seg[idx] = val;
+            return;
+        }
+        int mid = (start+end)/2;
+        if(i<=mid) {
+            update(start, mid, i, val, 2*idx+1);
+        }
+        else {
+            update(mid+1, end, i, val, 2*idx+2);
+        }
+        seg[idx] = seg[2*idx+1] + seg[2*idx+2];
+    }
+    public static int sum(int i, int j) {
+        return sum(0, n-1, i, j, 0);
+    }
+    public static int sum(int start, int end, int i, int j, int idx) {
+        if(start>j || end<i)
+            return 0;
+        if(i<=start && j>=end)
+            return seg[idx];
+        int mid = (start+end)/2;
+        return sum(start, mid, i, j, 2*idx+1) + sum(mid+1, end, i, j, 2*idx+2);
     }
 }
 ```
