@@ -1004,22 +1004,33 @@ public static int binary_search(int[] nums, int l, int r, int v) {
     else
         return -1;
 }
-public static int lower_Bound(int[] nums,int l,int r,int v){
-    while(l<r){
-        int mid = (r + l) / 2;
-        if(nums[mid] >= v)
-            r = mid;
-        else if(nums[mid] < v)
-            l = mid+1;
+public static int lower_Bound(int[] nums, int left, int right, int target){
+    if(left>=nums.length)
+        return -1;
+    while(left<right){
+        int mid = (right + left) / 2;
+        if(mid==nums.length-1)
+            break;
+        if(nums[mid] >= target) {
+            right = mid;
+        }
+        else if(nums[mid] < target) {
+            left = mid+1;
+        }
+
     }
-    if(nums[l]==v)
-        return l;
+    if(nums[left]==target)
+        return left;
     else
         return -1;
 }
 public static int upper_Bound(int[] nums,int l,int r,int v){
+    if(l>=nums.length)
+        return -1;
     while(l<r){
         int mid = (r + l) / 2;
+        if(mid==nums.length-1)
+            break;
         if(nums[mid] <= v)
             l = mid+1;
         else if(nums[mid] > v)
