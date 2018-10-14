@@ -843,6 +843,8 @@ class TreeNode {
 ```
 
 ## 树状数组
+&emsp;&emsp;数组的区间求和的复杂度是O(n)，树状数组可以将数组区间求和的复杂度降低到O(lg n)。这对于长数组的高频率区间求和的应用场景来讲，可以提高效率。  
+
 ```
 public class Main {
     static int length = 4;
