@@ -656,6 +656,74 @@ public static ArrayList<ArrayList<Integer>> getSubset(ArrayList<Integer> L, int 
     // 19. 从低位到高位,将n的第m位置为0
     System.out.println(n & ~(0<<(m-1)));
 ```
+## 线段树
+
+```
+public class Main {
+    public static void main(String args[]) throws Exception{
+        int[] A = {1, 4, 2, 3, 5, 7, 8, 8};
+        SegmentTreeNode root = build(A);
+        dfs(root);
+        System.out.println(query_max(root, 1, 5));
+    }
+    public static void dfs(SegmentTreeNode root) {
+        if(root==null)
+            return;
+        System.out.println("当前节点维护区间为:["+root.start+","+root.end+"]  " +
+                "最大值为:"+root.max+" 最小值为:"+root.min+" 和为:"+root.sum +" 均值为:" + root.average);
+        dfs(root.left);
+        dfs(root.right);
+    }
+    public static SegmentTreeNode build(int[] A) {
+        return buildhelper(0, A.length-1, A);
+    }
+    public static SegmentTreeNode buildhelper(int left, int right, int[] A) {
+        if(left>right)
+            return null;
+        SegmentTreeNode root = new SegmentTreeNode(left, right, A[left]);
+        if(left==right)
+            return root;
+        int mid = (left+right)/2;
+        root.left = buildhelper(left, mid, A);
+        root.right = buildhelper(mid+1, right, A);
+        root.max = Math.max(root.left.max, root.right.max);
+        root.min = Math.min(root.left.min, root.right.min);
+        root.sum = root.left.sum + root.right.sum;
+        root.average = (root.sum)*1.0/(root.end + 1 - root.start);
+        return root;
+    }
+    public static int query_max(SegmentTreeNode root, int start, int end) {
+        if(start<=root.start && root.end<=end) {
+            return root.max;
+        }
+        int mid = (root.start + root.end) / 2; // 二分法划分区间
+        int res = Integer.MIN_VALUE;
+        if(start<=mid) {// 如果查询区间和左边节点区间有交集,则寻找查询区间在左边区间上的最大值
+            res = Math.max(res, query_max(root.left, start, end));
+        }
+        if(mid+1<=end) {// 如果查询区间和右边节点区间有交集,则寻找查询区间在右边区间上的最大值
+            res = Math.max(res, query_max(root.right, start, end));
+        }
+        return res;
+    }
+}
+
+class SegmentTreeNode {
+    public int start, end;
+    public int max, min, sum;
+    public double average = 0.0;
+    public SegmentTreeNode left, right;
+    public SegmentTreeNode(int start, int end, int basic) {
+        this.start = start;
+        this.end = end;
+        this.max = basic;
+        this.min = basic;
+        this.sum = basic;
+        this.left = null;
+        this.right = null;
+    }
+}
+```
 
 ## 进制转换
 &emsp;&emsp;任意进制间的转换，使用10进制进行桥接即可。利用了StringBuilder、取余等操作即可，实现过程如下：
@@ -2689,3 +2757,4 @@ static void solve() {
 ```
 #### 坐标离散化
 &emsp;&emsp;直线将区域划分为多少个区块(挑战程序竞赛p164)  
+&emsp;&emsp;暂时没有Java代码  
