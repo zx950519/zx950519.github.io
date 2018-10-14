@@ -1489,6 +1489,78 @@ class Solution {
     }
 }
 ```
+#### 两数相除
+&emsp;&emsp;https://leetcode-cn.com/problems/divide-two-integers/description/  
+```
+public int divide(int dividend, int divisor) {
+    boolean isP = true;
+    if((dividend<0 && divisor>0) || (dividend>0 && divisor<0))
+        isP = false;
+
+    long ldividend = Math.abs((long) dividend);
+    long ldivisor = Math.abs((long) divisor);
+    if(ldivisor==0)
+        return Integer.MAX_VALUE;
+    if(ldividend==0 || ldividend<ldivisor)
+        return 0;
+    long result = divide(ldividend, ldivisor);
+    if(result>Integer.MAX_VALUE){
+        return isP? Integer.MAX_VALUE : Integer.MIN_VALUE;
+    }
+    return (int)(isP? result : -result);
+
+
+}
+
+public long divide(long ldividend, long ldivisor) {
+    if(ldividend<ldivisor)
+        return 0;
+    long sum = ldivisor;
+    long res = 1;
+    while(ldividend >= (sum+sum)) {
+        sum += sum;
+        res += res;
+    }
+    return res + divide(ldividend-sum, ldivisor);
+}
+```
+```
+public int divide(int dividend, int divisor) {
+        if(dividend > Integer.MAX_VALUE ||dividend < Integer.MIN_VALUE ||divisor > Integer.MAX_VALUE||divisor < Integer.MIN_VALUE){
+            return Integer.MAX_VALUE;
+        }
+        if(divisor == 0){
+            return Integer.MAX_VALUE;
+        }
+        if(dividend == Integer.MIN_VALUE){
+            if(divisor == -1 || divisor == 1){
+                return divisor == -1 ? ~dividend : dividend;
+            }
+        }
+ 
+        int flag = 1;  
+        long div=dividend, dor=divisor;  
+        if (div<0) {  
+            flag *= -1;  
+            div *= -1;  
+        }  
+        if (dor<0){  
+            flag *= -1;  
+            dor *= -1;  
+        }  
+        int re = 0;  
+        while (div >= dor){  
+            long aa = 1, temp = dor;  
+            while (temp < div>>1){  
+                temp <<= 1;  
+                aa <<= 1;  
+            }  
+            div -= temp ;  
+            re += aa  ;  
+        }  
+        return re*flag;  
+    }
+```
 
 ## 日期问题
 #### 给定年月日判断是星期几  
