@@ -841,6 +841,61 @@ class TreeNode {
     }
 }
 ```
+
+## 树状数组
+```
+public class Main {
+    static int length = 4;
+    static int[] tree = new int[length+1];
+    public static void main(String args[]) throws Exception{
+        put(1, 2);
+        put(2, 3);
+        put(3, 4);
+        put(4, 5);
+        System.out.println(sum(2, 4));
+    }
+    public static int sum(int index){
+        if (index<1 && index>length) {
+            throw new IllegalArgumentException("Out of Range!");
+        }
+        int sum=0;
+        while (index>0) {
+            sum+=tree[index];
+            index -= lowBit(index);
+        }
+        return sum;
+    }
+    public static int sum(int start,int end) {
+        return sum(end)-sum(start-1);
+    }
+    public static void put(int index,int value){
+        if (index<1 && index>length) {
+            throw new IllegalArgumentException("Out of Range!");
+        }
+        while (index<=length) {
+            tree[index] += value;
+            index += lowBit(index);
+        }
+    }
+    public static int get(int index){
+        if (index<1&&index>length) {
+            throw new IllegalArgumentException("Out of Range!");
+        }
+        int sum=tree[index];
+        int z=index-lowBit(index);
+        index--;
+        while (index!=z) {
+            sum-=tree[index];
+            index-=lowBit(index);
+        }
+        return sum;
+    }
+    public static int lowBit(int k){
+        return k&-k;
+    }
+}
+```
+
 ## 进制转换
 &emsp;&emsp;任意进制间的转换，使用10进制进行桥接即可。利用了StringBuilder、取余等操作即可，实现过程如下：
 ```
