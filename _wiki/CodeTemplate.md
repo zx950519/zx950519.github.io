@@ -789,7 +789,58 @@ public class Main {
     }
 }
 ```
+&emsp;&emsp;计算右侧小于当前元素的个数(https://leetcode-cn.com/problems/count-of-smaller-numbers-after-self/description/)  
+```
+class Solution {
+    public List<Integer> countSmaller(int[] nums) {
+        Integer[] result = new Integer[nums.length];
+        TreeNode root = null;
+        // 从右往左以此插入数字
+        for(int i = nums.length - 1; i >= 0; i--) {
+            root = insert(nums[i], root, result, i, 0);
+        }
+//        dfs(root);
+        return Arrays.asList(result);
+    }
+    
+    public static TreeNode insert(int num, TreeNode node, Integer[] result, int idx, int preSum) {
+        // 创建节点
+        if(node == null) {
+            node = new TreeNode(num);
+            node.count = 0;
+            node.duplicates = 1;
+            result[idx] = preSum;
+        }
+        // 更新节点
+        else if (node.val == num) {
+            node.duplicates++;
+            result[idx] = preSum + node.count;
+        }
+        // 在左子树添加
+        else if (node.val > num) {
+            node.count++;
+            node.left = insert(num, node.left, result, idx, preSum);
+        }
+        // 在右子树添加
+        else {
+            node.right = insert(num, node.right, result, idx, preSum + node.duplicates + node.count);
+        }
+        return node;
+    }
+}
+class TreeNode {
+    int val;
+    int count; // **从左往右**，小于该val的数字的数目
+    int duplicates; // 该val对应的数字的重复个数
 
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int val) {
+        this.val = val;
+    }
+}
+```
 ## 进制转换
 &emsp;&emsp;任意进制间的转换，使用10进制进行桥接即可。利用了StringBuilder、取余等操作即可，实现过程如下：
 ```
