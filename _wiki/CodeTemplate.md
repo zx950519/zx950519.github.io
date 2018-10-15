@@ -84,6 +84,7 @@ class InputReader {
 输出一个浮点数：345.678000，一个整数：1234，一个字符串：你好！
 字符串：你好！，1234的十六进制数：0x4d2
 ```
+
 ## JAVA-API
 ```
 1.ArrayList去重：List<Integer> unipue = list.stream().distinct().collect(Collectors.toList());
@@ -362,6 +363,7 @@ public class FixSizedPriorityQueue<E extends Comparable> {
     }
 }
 ```
+
 ## 并查集
 ```
 static int n = 20;
@@ -500,7 +502,7 @@ public static int[][] transformImage(int[][] mat, int n) {
         return mat;
     }
 ```
-&emsp;&emsp;推广:逆时针旋转180°，顺时针旋转180°以及更高维度的旋转操作，由旋转90°的基本操作组合即可！
+&emsp;&emsp;推广:逆时针旋转180°，顺时针旋转180°以及更高维度的旋转操作，由旋转90°的基本操作组合即可！  
 
 ## 类型转换
 #### String转double
@@ -528,8 +530,7 @@ class Transformation {
 
 }
 ```
-
-&emsp;&emsp;持续更新中
+&emsp;&emsp;持续更新中  
 
 ## 位运算问题
 &emsp;&emsp;一些使用位运算的奇淫技巧  
@@ -894,6 +895,45 @@ public class Main {
     }
     public static int lowBit(int k){
         return k&-k;
+    }
+}
+```
+#### 冒泡排序的交换次数
+```
+public class Main {
+    static int n = 0;
+    static int MAX_N = 10000;
+    static int[] dat = new int[1000000];
+    static int[] a = new int[MAX_N];
+    public static void main(String args[]) throws Exception{
+        Scanner scanner = new Scanner(System.in);
+        n = scanner.nextInt();
+        for(int i=0; i<n; i++)
+            a[i] = scanner.nextInt();
+        System.out.println(opt());
+    }
+    public static int sum(int i) {
+        int ans = 0;
+        while(i>0) {
+            ans += dat[i];
+            i -= i& -i;
+        }
+        return ans;
+    }
+    public static void add(int i, int x) {
+        while (i<=n) {
+            dat[i]+=x;
+            i+= i& -i;
+        }
+    }
+    public static int opt() {
+        int ans = 0;
+        for(int i=0; i<n; i++) {
+            System.out.println("当前:"+i+" sum():"+(i-sum(a[i])));
+            ans += i-sum(a[i]);
+            add(a[i], 1);
+        }
+        return ans;
     }
 }
 ```
@@ -1814,15 +1854,11 @@ class Solution {
 }
 ```
 
-&emsp;&emsp;水坑问题(DFS)：
-
+&emsp;&emsp;水坑问题(DFS)：  
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fv4rg2bzhzj30k60fwwfs.jpg)  
-
 &emsp;&emsp;迷宫最短路径问题(BFS):  
-
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fv4rkf6nehj30jx09g3zf.jpg)  
 ![](https://ws1.sinaimg.cn/large/005L0VzSgy1fv4rkz5x11j30jw0hbq5a.jpg)  
-
 &emsp;&emsp;岛屿问题(DFS):https://leetcode-cn.com/problems/number-of-islands/description/  
 ```
 class Solution {
@@ -1864,7 +1900,6 @@ class Solution {
 }
 ```
 &emsp;&emsp;岛屿问题改(求最大岛屿面积)(DFS):https://leetcode-cn.com/problems/max-area-of-island/description/  
-
 ```
 class Solution {
     int opt = 0;
