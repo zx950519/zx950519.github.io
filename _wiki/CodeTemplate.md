@@ -88,7 +88,7 @@ class InputReader {
 ## JAVA-API
 ```
 1.ArrayList去重：List<Integer> unipue = list.stream().distinct().collect(Collectors.toList());
-2.
+2.判断二维数组是否为空:if(matrix==null||matrix.length==0||(matrix.length==1&&matrix[0].length==0))
 ```
 ## 精度问题
 #### 问题分析  
