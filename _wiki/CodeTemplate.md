@@ -2709,7 +2709,6 @@ class Solution {
 ```
 #### 获取多叉树的深度
 &emsp;&emsp;https://leetcode-cn.com/problems/maximum-depth-of-n-ary-tree/description/  
-
 ```
 class Solution {
     int res = 0;
@@ -2737,7 +2736,6 @@ class Solution {
 ```
 #### 叶子相似的树
 &emsp;&emsp;https://leetcode-cn.com/problems/leaf-similar-trees/description/  
-
 ```
 class Solution {
     Queue<Integer> q1 = new LinkedList<>();
@@ -2753,7 +2751,6 @@ class Solution {
         }
         return true;
     }
-    
     public void judge(TreeNode root, int flag) {
         if(root.left==null&&root.right==null)
             if(flag==1)
@@ -2771,7 +2768,6 @@ class Solution {
 ```
 ####  二叉树的右视图
 &emsp;&emsp;https://leetcode-cn.com/problems/binary-tree-right-side-view/description/  
-
 ```
 class Solution {
     Queue<TreeNode> q1 = new LinkedList<>();
@@ -2815,7 +2811,6 @@ class Solution {
 ```
 #### 递增顺序查找树
 &emsp;&emsp;https://leetcode-cn.com/problems/increasing-order-search-tree/description/  
-
 ```
 class Solution {
     List<Integer> data = new ArrayList<>();
@@ -2884,7 +2879,6 @@ class Solution {
     }
 }
 ```
-
 &emsp;&emsp;https://leetcode-cn.com/problems/path-sum-ii/description/  
 ```
 class Solution {
@@ -2915,7 +2909,29 @@ class Solution {
     }
 }
 ```
-
+#### 根据二叉树创建字符串
+&emsp;&emsp;https://leetcode-cn.com/problems/construct-string-from-binary-tree/description/  
+```
+class Solution {
+    public String tree2str(TreeNode t) {
+        return dfs(t);
+    }
+    public String dfs(TreeNode t) {
+        if(t==null) {
+            return "";
+        }
+        String sb = "";
+        sb += t.val;
+        if(t.left!=null && t.right!=null)
+            sb +="("+dfs(t.left)+")"+"("+dfs(t.right)+")";
+        if(t.left==null && t.right!=null)
+            sb += "()"+"("+dfs(t.right)+")";
+        if(t.left!=null && t.right==null)
+            sb += "("+dfs(t.left)+")";
+        return sb;
+    }
+}
+```
 ## 栈问题
 #### 火车扳倒叉问题
 &emsp;&emsp;大量参考：https://blog.csdn.net/mate_ge/article/details/51006724  
