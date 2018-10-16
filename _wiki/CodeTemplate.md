@@ -1380,6 +1380,33 @@ class Solution {
             return half * half * x;
         else
             return half * half / x;
+            
+        //
+        double res = 1.0;
+        for (int i = n; i != 0; i /= 2) {
+            if (i % 2 != 0) res *= x;
+            x *= x;
+        }
+        return n < 0 ? 1 / res : res;
+    }
+}
+```
+#### 超级次方(快速幂取模)
+```
+class Solution {
+    public int superPow(int a, int[] b) {
+        int res = 1;
+        for(int i=0; i<b.length; i++) {
+            res = pow(res, 10)*pow(a, b[i])%1337;
+        }
+        return res;
+    }
+    int pow(int x, int n) {
+        if(n==0)
+            return 1;
+        if(n==1)
+            return x%1337;
+        return (pow(x%1337, n/2)*pow(x%1337, n-n/2))%1337;
     }
 }
 ```
