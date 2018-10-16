@@ -89,6 +89,7 @@ class InputReader {
 ```
 1.ArrayList去重：List<Integer> unipue = list.stream().distinct().collect(Collectors.toList());
 2.判断二维数组是否为空:if(matrix==null||matrix.length==0||(matrix.length==1&&matrix[0].length==0))
+3.数组深拷贝:Arrays.copyOf(a, a.length+5);//参数1:旧数组;参数2：新数组的长度
 ```
 ## 精度问题
 #### 问题分析  
