@@ -90,6 +90,15 @@ class InputReader {
 1.ArrayList去重：List<Integer> unipue = list.stream().distinct().collect(Collectors.toList());
 2.判断二维数组是否为空:if(matrix==null||matrix.length==0||(matrix.length==1&&matrix[0].length==0))
 3.数组深拷贝:Arrays.copyOf(a, a.length+5);//参数1:旧数组;参数2：新数组的长度
+4.Map的降序&升序
+    List<Map.Entry<Character, Integer>> list = new ArrayList<Map.Entry<Character, Integer>>(map.entrySet());
+    Collections.sort(list,new Comparator<Map.Entry<Character, Integer>>() {
+        public int compare(Entry<Character, Integer> o1,
+                Entry<Character, Integer> o2) {
+            return o2.getValue().compareTo(o1.getValue());
+        }
+    });
+    for(Map.Entry<Character, Integer> mapping:list){} 
 ```
 ## 精度问题
 #### 问题分析  
