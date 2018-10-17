@@ -25,4 +25,18 @@ keywords: 目录
 -17.后端架构师技术图谱：https://github.com/zx950519/architect-awesome  
 -18.互联网公司技术架构：https://github.com/zx950519/architecture.of.internet-product  
 -19.A tool for hyperparameter optimization of machine learning models：https://github.com/zx950519/Arbiter  
--20.
+-20.Implementation of a Dual Coordinate Descent algorithm for SVM training：https://github.com/zx950519/SVMDC  
+-21.ShotGun：https://github.com/zx950519/shotgun  
+-22.caffe-parallel：https://github.com/zx950519/caffe-parallel  
+-23.proxcocoa：https://github.com/zx950519/proxcocoa  
+-24.asyspark：https://github.com/zx950519/asyspark  
+-25.A general-purpose Java library for performing structured learning.：https://github.com/zx950519/illinois-sl  
+-26.手写数字识别移植到Android端：https://github.com/zx950519/Mnist  
+-27.Simplifying robust end-to-end machine learning on Apache Spark.：https://github.com/zx950519/keystone  
+-28.Scripts used to setup a Spark cluster on EC2：https://github.com/zx950519/spark-ec2  
+-29.Springboot 多模块项目：https://github.com/zx950519/springboot  
+-30.communication-efficient distributed coordinate ascent：https://github.com/zx950519/cocoa  
+-31.机器学习资源大全中文版：https://github.com/zx950519/awesome-machine-learning-cn  
+-32.机器学习相关教程：https://github.com/zx950519/tutorials  
+-33.视频学习资源共享：https://github.com/zx950519/share_video  
+-34.
