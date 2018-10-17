@@ -98,7 +98,8 @@ class InputReader {
             return o2.getValue().compareTo(o1.getValue());
         }
     });
-    for(Map.Entry<Character, Integer> mapping:list){} 
+    for(Map.Entry<Character, Integer> mapping:list){}  
+5.暴力去除字符串中的空格：String[] words = s.trim().split(" +");
 ```
 ## 精度问题
 #### 问题分析  
@@ -1708,23 +1709,23 @@ D(m, n) = F(m) * C(m, n);其中F(m)是全错排数量,C(m, n)是组合数格式�
 #### 一些基本操作
 ```
     去除空格:s.replaceAll(" ","");
+    去除空格：String[] words = s.trim().split(" +");
     大小写转换:s.toLowerCase();s.toUpperCase();
     提取字母&数字:s.replaceAll("[^a-z^A-Z^0-9]", "");
     字符串逆序:new StringBuffer(s).reverse().toString();
     字符大小写转换:大->小 (char)(c+32);小->大 (char)(c-32);
+    字符串单词翻转：String[] words = s.trim().split(" +");Collections.reverse(Arrays.asList(words));return String.join(" ", words);
 ```
 
 #### 无重复字符的最长子串长度
 &emsp;&emsp;算法运行一遍即可了解过程  
 ```
 public class Main {
-
     public static void main(String[] args) throws Exception{
         Scanner scanner = new Scanner(System.in);
         String d = scanner.nextLine();
         System.out.println(fun(d));
     }
-
     public static int fun(String s){
         if(s == null || s.length() < 1)
             return 0;
@@ -1763,11 +1764,8 @@ public class Main {
     }
 }
 ```
-
 #### 子串(indexOf)手动实现
-
 &emsp;&emsp;https://leetcode-cn.com/problems/implement-strstr/description/  
-
 ```
 class Solution {
     public int strStr(String haystack, String needle) {
