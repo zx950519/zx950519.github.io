@@ -39,4 +39,8 @@ keywords: 目录
 -31.机器学习资源大全中文版：https://github.com/zx950519/awesome-machine-learning-cn  
 -32.机器学习相关教程：https://github.com/zx950519/tutorials  
 -33.视频学习资源共享：https://github.com/zx950519/share_video  
--34.
+-34.Distributed Deep Learning Library for Apache Spark：https://github.com/zx950519/BigDL  
+-35.Java Statistical Analysis Tool, a Java library for Machine Learning：https://github.com/zx950519/JSAT  
+-36.分布式服务通讯框架：https://github.com/zx950519/xxl-rpc  
+-37.互联网公司技术架构：https://github.com/zx950519/architecture.of.internet-product  
+-38.后端架构师技术图谱：https://github.com/zx950519/architect-awesome  
