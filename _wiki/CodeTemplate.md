@@ -1068,29 +1068,26 @@ public static int lower_Bound(int[] nums, int left, int right, int target){
         else if(nums[mid] < target) {
             left = mid+1;
         }
-
     }
     if(nums[left]==target)
         return left;
     else
         return -1;
 }
-public static int upper_Bound(int[] nums,int l,int r,int v){
-    if(l>=nums.length)
+public static int upper_Bound(int[] nums,int left,int right,int target){
+    int tmp = lower_Bound(nums, 0, nums.length-1, target);
+    int pian = 0;
+    if(tmp==-1)
         return -1;
-    while(l<r){
-        int mid = (r + l) / 2;
-        if(mid==nums.length-1)
-            break;
-        if(nums[mid] <= v)
-            l = mid+1;
-        else if(nums[mid] > v)
-            r = mid;
+    else {
+        for(int i=tmp+1; i<nums.length; i++) {
+            if(nums[i]==target)
+                pian++;
+            else
+                break;
+        }
     }
-    if(nums[l-1]==v)
-        return l-1;
-    else
-        return -1;
+    return tmp+pian;
 }
 ```
 #### 割绳子
