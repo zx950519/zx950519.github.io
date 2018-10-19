@@ -99,7 +99,9 @@ class InputReader {
         }
     });
     for(Map.Entry<Character, Integer> mapping:list){}  
-5.暴力去除字符串中的空格：String[] words = s.trim().split(" +");
+5.暴力去除字符串中的空格：String[] words = s.trim().split(" +");  
+6.保留两位小数:http://blog.51cto.com/glblong/1312340  
+
 ```
 ## 精度问题
 #### 问题分析  
