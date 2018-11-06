@@ -11,7 +11,7 @@ github_repo: "https://github.com/zx950519/zx950519.github.io.git" # you code rep
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "不积跬步 无以至千里"
+sidebar-about-description: "人生格言：不积跬步 无以至千里"
 sidebar-avatar: /img/about-ZX-gentle.png      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
