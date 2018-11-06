@@ -1,82 +1,139 @@
-# 码志
+# Yummy Jekyll Theme
 
-我的个人博客：<https://mazhuang.org>，欢迎 Star 和 Fork。
+A Simple, Bootstrap Based Theme. Especially for developers who like to show their projects on website and like to take notes. There are also some magical features to discover. 
 
-## 概览
+## [Live Demo](http://dongchuan.github.io/)
 
-<!-- vim-markdown-toc GFM -->
+Open issues if you find bugs or even have trouble installing jekyll or dependencies. :D
 
-* [效果预览](#效果预览)
-* [Fork 指南](#fork-指南)
-* [贴心提示](#贴心提示)
-* [经验与思考](#经验与思考)
-* [致谢](#致谢)
+Or contact: dongchuan55@gmail.com
 
-<!-- vim-markdown-toc -->
+> Strongly suggest to fork and change project name to create your GitHub Pages instead of downloading it directly. Because in the future, I will develop many funny modules like 'footprint' to show your world wide trip. Could be easier to merge new features in the future.
 
-## 效果预览
+## Notable Features
 
-**[在线预览 &rarr;](https://mazhuang.org)**
+* Compatible with Jekyll 3.x and GitHub Pages
+* Based on Bootstrap
+* [Github Module](http://dongchuan.github.io/open-source) to show your popular projects in a single page and on sidebar automatically. (Datas are retreived by github metadata instead of by api calls, so no delay) 
+* [Post Module](http://dongchuan.github.io/blog) to show all your posts with timeline
+* [Bookmark Module](http://dongchuan.github.io/bookmark) to establish a quick mark about all libs/tools/books you like to use.
+* [Post Navigation Module](http://dongchuan.github.io/css/2016/04/22/CSS-Animation.html) to generat a quick directory of your post by titles/subtitles automatically.
+* Support [Disqus Comment](https://disqus.com/home/explore/)
+* Support [Google Analytics](https://analytics.google.com/analytics/web/)
 
-![screenshot home](https://mazhuang.org/assets/images/screenshots/home.png)
+Features in future:
+* A Footprint module to show all your travel around the world
+* Feature to share. (Facebook, twitter, evernote and so on)
+* (Not sure) A embeded todo list. (Not sure) to travel, to complete, to do for your parents, etc. To do in life!
+* Creative ideas to discuss with you :P
 
-## Fork 指南
+## Install and setup
 
-Fork 本项目之后，还需要做一些事情才能让你的页面「正确」跑起来。
+Before using it, you may need [Bower](http://bower.io/) and [Bundler](http://bundler.io/) on your local to install dependencies.
 
-1. 正确设置项目名称与分支。
+1. Fork code and clone
+2. Run `bower install` to install all dependencies in [bower.json](https://github.com/DONGChuan/DONGChuan.github.io/blob/master/bower.json)
+3. Run `bundle install` to install all dependencies in [Gemfile](https://github.com/DONGChuan/DONGChuan.github.io/blob/master/Gemfile)
+4. Update `_config.yml` with your own settings.
+5. Add posts in `/_posts`
+6. Commit to your own Username.github.io repository.
+7. Then come back to star this theme!
 
-   按照 GitHub Pages 的规定，名称为 `username.github.io` 的项目的 master 分支，或者其它名称的项目的 gh-pages 分支可以自动生成 GitHub Pages 页面。
+> When install dependencies by bundler or gem, you may have some errors depending on your environment.
 
-2. 修改域名。
+> Error about `json`. Check response of [Massimo Fazzolari on Stackoverflow](http://stackoverflow.com/questions/8100891/the-json-native-gem-requires-installed-build-tools) to quick fix your problem. (Please also use latest version instead of 1.9.3 mentioned in the response)
+  
+> Error about `jekyll-paginate`. Please check [here](http://stackoverflow.com/questions/35401566/dont-have-jekyll-paginate-or-one-of-its-dependencies-installed)
 
-   如果你需要绑定自己的域名，那么修改 CNAME 文件的内容；如果不需要绑定自己的域名，那么删掉 CNAME 文件。
+> Error about `SSL_connect`. Please check [here](http://stackoverflow.com/questions/15305350/gem-install-fails-with-openssl-failure) and [here](http://railsapps.github.io/openssl-certificate-verify-failed.html)
 
-3. 修改配置。
+> For the moment, when you test on your local, you need to keep internet connection. Bug will be fixed soon.
 
-   网站的配置基本都集中在 \_config.yml 文件中，将其中与个人信息相关的部分替换成你自己的，比如网站的 url、title、subtitle 和第三方评论模块的配置等。
+## How to use
 
-   **评论模块：** 目前支持 disqus、gitment 和 gitalk，选用其中一种就可以了，推荐使用 gitalk。它们各自的配置指南链接在 \_config.yml 文件的 Comments 一节里都贴出来了。
+#### Create a new post
 
-   **注意：** 如果使用 disqus，因为 disqus 处理用户名与域名白名单的策略存在缺陷，请一定将 disqus.username 修改成你自己的，否则请将该字段留空。我对该缺陷的记录见 [Issues#2][3]。
+Create a `.md` file inside `_posts` folder.
 
-4. 删除我的文章与图片。
+Name the file according to the standard jekyll format.
 
-   如下文件夹中除了 template.md 文件外，都可以全部删除，然后添加你自己的内容。
+```
+2016-01-19-i-love-yummy.md
+```
 
-   * \_posts 文件夹中是我已发布的博客文章。
-   * \_drafts 文件夹中是我尚未发布的博客文章。
-   * \_wiki 文件夹中是我已发布的 wiki 页面。
-   * images 文件夹中是我的文章和页面里使用的图片。
+Write the Front Matter and content in the file.
 
-5. 修改「关于」页面。
+```
+---
+layout: post
+title: Post title
+category: Category
+tags: [tag1, tag2]
+---
+```
 
-   pages/about.md 文件内容对应网站的「关于」页面，里面的内容多为个人相关，将它们替换成你自己的信息，包括 \_data 目录下的 skills.yml 和 social.yml 文件里的数据。
+Please find examples [here](https://github.com/DONGChuan/DONGChuan.github.io/tree/master/_posts)
 
-## 贴心提示
+> Jekyll supports different structure of repository. You could just create as many folders as you want under _posts. Then jekyll will look through all folders/subfolders to find your posts. So cool, right? :D
 
-1. 排版建议遵照一定的规范，推荐 [中文文案排版指北（简体中文版）][1]。
+#### [Post Navigation Module](http://dongchuan.github.io/css/2016/04/22/CSS-Animation.html)
 
-2. 在本地预览博客效果可以参考 [Setting up your Pages site locally with Jekyll][2]。
+When writing post, please always follow this format:
 
-## 经验与思考
+```
+Description about this post, blablabla
 
-* 简约，尽量每个页面都不展示多余的内容。
+## Title A
 
-* 有时一图抵千言，有时可能只会拖慢网页加载速度。
+### Title A-1
 
-* 言之有物，不做无痛之呻吟。
+### Title A-2
 
-* 如果写技术文章，那先将技术原理完全理清了再开始写，一边摸索技术一边组织文章效率较低。
+## Title B
 
-* 杜绝难断句、难理解的长句子，如果不能将其拆分成几个简洁的短句，说明脑中的理解并不清晰。
+### Title B-1
 
-* 可以学习一下那些高质量的博主，他们的行文，内容组织方式，有什么值得借鉴的地方。
+```
 
-## 致谢
+So, Title A, A-1, A-2, Title B, B-1 will be detected and created as a directory
 
-本博客外观基于 [DONGChuan](https://dongchuan.github.io) 修改，感谢！
+For example, [a demo post](https://github.com/DONGChuan/DONGChuan.github.io/edit/master/_posts/2016-04-22-CSS-Animation.md)
 
-[1]: https://github.com/mzlogin/chinese-copywriting-guidelines
-[2]: https://help.github.com/articles/setting-up-your-pages-site-locally-with-jekyll/
-[3]: https://github.com/mzlogin/mzlogin.github.io/issues/2
+But if you do not like it or your post is quite short. You want to hide this navigation to make your post occupy your full screen. You just need to set **no-post-nav:true** in the Front Matter of the post where you want to hide this feature :D
+
+#### [Github Module](http://dongchuan.github.io/open-source)
+
+This module will get automatically all your repository information from github. But to test on your local, you must keep internet connection. 
+In the future, it will also show the repositories you contributed a lot and the ones of your organization.
+
+#### [Bookmark Module](http://dongchuan.github.io/bookmark)
+
+To add new marks, you only need to edit [bookmark.md](https://github.com/DONGChuan/Yummy-Jekyll/blob/master/bookmark.md).
+
+#### [Customize About Page](http://dongchuan.github.io/about)
+
+Feel free to customize about.me page to show yourself. You only need to modify [about.md](https://github.com/DONGChuan/Yummy-Jekyll/blob/master/about.md) and [about.html](https://github.com/DONGChuan/Yummy-Jekyll/blob/master/_includes/about.html)
+
+## ToDo
+
+- [ ] List posts by a specified tag
+- [ ] New module FootPrint to show your world around trips
+- [ ] Show projects from your orgnization on github. (Siderbar, in open-source page)
+- [ ] To fix bug - could only test on local with internet connected.
+
+## Contributor
+
+* [DONGChuan](https://github.com/DONGChuan)
+* [Mojtaba Koosej](https://github.com/mkoosej)
+* [shahsaurabh0605](https://github.com/shahsaurabh0605)
+* [Z-Beatles](http://www.waynechu.cn/)
+* [LM450N](https://github.com/LM450N)
+* [XhmikosR](https://github.com/XhmikosR)
+
+## License
+
+The Apache License 2.0
+
+Copyright (c) 2016 DONG Chuan
+
+Check [LICENSE](https://github.com/DONGChuan/DONGChuan.github.io/blob/master/LICENSE) file and [official website](http://www.apache.org/licenses/LICENSE-2.0) for details

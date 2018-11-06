@@ -1,49 +1,34 @@
 ---
 layout: default
+css: ['sidebar-post-nav.css']
 ---
-<section class="collection-head small geopattern" data-pattern-id="{{ page.title | truncate: 15, ''}}">
-<div class="container">
-  <div class="columns">
-    <div class="column three-fourths">
-      <div class="collection-title">
-        <h1 class="collection-header">{{ page.title }}</h1>
-        <div class="collection-info">
-          {% if page.date %}
-          <span class="meta-info">
-            <span class="octicon octicon-calendar"></span> {{ page.date | date: "%Y/%m/%d" }}
-          </span>
-          {% endif %}
-          {% for cat in page.categories %}
-          <span class="meta-info">
-            <span class="octicon octicon-file-directory"></span>
-            <a href="{{ site.url }}/categories/#{{ cat }}" title="{{ cat }}">{{ cat }}</a>
-          </span>
-          {% endfor %}
+{% include jumbotron.html %}
+<article class="post container" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="row">
+
+        {% if page.no-post-nav %}
+        <div class="col-md-12 markdown-body">
+
+            {{ content }}
+
+            <!-- Comments -->
+            {% include disqus-comments.html %}
         </div>
-      </div>
+        {% else %}
+        <div class="col-md-8 markdown-body">
+
+            {{ content }}
+
+            <!-- Comments -->
+            {% include disqus-comments.html %}
+        </div>
+
+        <div class="col-md-4">
+            {% include sidebar-post-nav.html %}
+        </div>
+        {% endif %}
+
     </div>
-  </div>
-</div>
-</section>
-<!-- / .banner -->
-<section class="container content">
-<div class="columns">
-  <div class="column three-fourths" >
-    <article class="article-content markdown-body">
-    {{ content }}
-    </article>
-    <div class="share">
-      {% include sns-share.html %}
-    </div>
-    <div class="comment">
-      {% include comments.html %}
-    </div>
-  </div>
-  <div class="column one-fourth">
-    {% include sidebar-search.html %}
-    {% include sidebar-qrcode.html %}
-    {% include sidebar-post-nav.html %}
-  </div>
-</div>
-</section>
-<!-- /section.content -->
+
+</article>
