@@ -1,15 +1,3 @@
----
-layout:		post
-title:      解题模板
-subtitle:   Java笔试万能解题模板
-date:       2018-11-06
-author:     Alitria
-header-img: img/post-bg-cook.jpg
-catalog: true
-tags:
-    - Java
----
-
 ## 输入问题
 &emsp;&emsp;Codeforces著名世界级选手Petr大爷写的Java输入内部类:  
 ```
