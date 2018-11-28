@@ -234,3 +234,7 @@ if __name__=="__main__":
     submission = pd.concat([pd.Series(range(1, 28001), name="ImageId"), res], axis=1)
     submission.to_csv("MNIST-CNN-ENSEMBLE.csv", index=False)
 ```
+
+## 代码得分
+&emsp;&emsp;最高分历史记录  
+![](http://ww1.sinaimg.cn/large/005L0VzSgy1fxo2ecvtl6j30qb03n74c.jpg)  
