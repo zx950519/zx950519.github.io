@@ -1697,6 +1697,82 @@ D(m, n) = F(m) * C(m, n);其中F(m)是全错排数量,C(m, n)是组合数格式�
 ```
 
 ## 字符串问题
+#### 最长回文串
+&emsp;&emsp;https://leetcode-cn.com/problems/longest-palindromic-substring/submissions/  
+&emsp;&emsp;动态规划状态转移方程:  
+![](http://ww1.sinaimg.cn/large/005L0VzSly1fyi50j82v1j30pa06bmyj.jpg)  
+```
+class Solution {
+    // 动态规划解法
+    public String longestPalindrome(String s) {
+        if(s.length()==0)
+            return "";
+        if(s.length()==1)
+            return s;
+        int size = s.length();
+        boolean dp[][] = new boolean[size][size];
+        int maxlen = 1;
+        int start = 0;
+        for(int i=0; i<size; i++) {
+            for(int j=0; j<=i; j++) {
+                if(i-j<2) {
+                    dp[j][i] = (s.charAt(i)==s.charAt(j));
+                }
+                else {
+                    dp[j][i] = (s.charAt(i)==s.charAt(j) && dp[j+1][i-1]);
+                }
+                if(dp[j][i]==true && maxlen<i-j+1) {
+                    maxlen = i-j+1;
+                    start = j;
+                }
+            }
+        }
+        return s.substring(start, start+maxlen);
+    }
+}
+```
+&emsp;&emsp;中心开花法: 
+```
+class Solution {
+    // 中心开花法
+    public String longestPalindrome(String s) {
+        if(s.length()==0)
+            return "";
+        if(s.length()==1)
+            return s;
+        int size = s.length();
+        
+        int maxlen = 1;
+        int start = 0;
+        
+        for(int i=0; i<size; i++) {
+            int j=i-1, k=i+1;
+            while(j>=0 && k<size && s.charAt(j)==s.charAt(k)) {
+                if(k-j+1>maxlen) {
+                    maxlen = k-j+1;
+                    start = j;
+                }
+                j--;
+                k++;
+            }
+        }
+        
+        for(int i=0; i<size; i++) {
+            int j=i, k=i+1;
+            while(j>=0 && k<size && s.charAt(j)==s.charAt(k)) {
+                if(k-j+1>maxlen) {
+                    maxlen = k-j+1;
+                    start = j;
+                }
+                j--;
+                k++;
+            }
+        }
+        
+        return s.substring(start, start+maxlen);
+    }
+}
+```
 #### 一些基本操作
 ```
     去除空格:s.replaceAll(" ","");
