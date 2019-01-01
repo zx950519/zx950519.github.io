@@ -1697,6 +1697,47 @@ D(m, n) = F(m) * C(m, n);其中F(m)是全错排数量,C(m, n)是组合数格式�
 ```
 
 ## 字符串问题
+#### 字符串转int数值
+```
+class Solution {
+    public int myAtoi(String str) {
+    // 合法性判断
+    if (str.isEmpty() || str=="") 
+        return 0;
+    // 正负号标记
+    int sign = 1;
+    // 转换值
+    int base = 0;
+    // 索引位数
+    int i = 0;
+    // 剔除开始空白字符 Character.isSpace()
+    while (str.charAt(i) == ' ') {
+        i++;
+        if(i>=str.length())
+            return 0;
+    }
+
+    // 判断正负号
+    if (str.charAt(i) == '-' || str.charAt(i) == '+')
+        sign = str.charAt(i++) == '-' ? -1 : 1;
+    // 索引有效数字字符
+    while (i < str.length() && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+        // 如果`base > MAX_VALUE/10`那么`base*10 + new_value` > `base*10` > `MAX_VALUE`
+        // 这个应该很容易理解，这种情况下就会发生溢出。
+        // 若`base == INT_MAX/10`，而且`new_value = str.charAt(i++) - '0'`大于`7`，也会发生溢出。因为`MAX_VALUE = 2147483647`
+        if (base > Integer.MAX_VALUE / 10 || (base == Integer.MAX_VALUE / 10 && str.charAt(i) - '0' > 7)) {
+            return (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        }
+
+        // 计算转换值
+        base = 10 * base + (str.charAt(i++) - '0');
+    }
+
+        // 计算结果值
+        return base * sign;
+    }
+}
+```
 #### 最长回文串
 &emsp;&emsp;https://leetcode-cn.com/problems/longest-palindromic-substring/submissions/  
 &emsp;&emsp;动态规划状态转移方程:  
