@@ -1277,6 +1277,48 @@ class Solution {
 ```
 
 ## 数学问题
+#### 大数相加
+
+#### 大数相减
+
+#### 大数相乘
+```
+class Solution {
+    public String multiply(String num1, String num2) {
+        if(num1.equals("0") || num2.equals("0"))
+            return "0";
+        char[] a = new StringBuffer(num1).reverse().toString().toCharArray();
+        char[] b = new StringBuffer(num2).reverse().toString().toCharArray();
+        int lena = a.length;
+        int lenb = b.length;
+        int len = lena + lenb;
+        int[] res = new int[len];
+        for(int i=0; i<lena; i++) {
+            for(int j=0; j<lenb; j++) {
+                res[i+j] += (a[i]-'0') * (b[j]-'0');
+            }
+        }
+        for(int i=0; i<len; i++) {
+            if(res[i] >= 10) {
+                res[i+1] += res[i]/10;
+                res[i] %= 10;
+            }
+        }
+        StringBuffer sb = new StringBuffer();
+        boolean flag = true;
+        for(int i=len-1; i>=0; i--) {
+            if(res[i]==0 && flag==true) {
+                continue;
+            }
+            else {
+                flag = false;
+            }
+            sb.append(res[i]);
+        }
+        return sb.toString();
+    }
+}
+```
 #### 辗转相除法
 ```
 int gcd(int a, int b) {
