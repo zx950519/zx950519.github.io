@@ -1739,6 +1739,26 @@ D(m, n) = F(m) * C(m, n);其中F(m)是全错排数量,C(m, n)是组合数格式�
 ```
 
 ## 字符串问题
+
+#### 最短字符串(在字符串前面添加字符将其转换为回文串。找到并返回可以用这种方式转换的最短回文串)
+```
+class Solution {
+    public String shortestPalindrome(String s) {
+        StringBuffer sb = new StringBuffer(s);
+        String t = sb.reverse().toString();
+        int n = s.length();
+        int i=0;
+        for(i=n; i>=0; i--) {
+            // System.out.println(i+" "+s.substring(0, i)+" "+t.substring(n-i, n));
+            if(s.substring(0, i).equals(t.substring(n-i, n))) {
+                break;
+            }
+        }
+        // System.out.println(i);
+        return t.substring(0, n-i) + s;
+    }
+}
+```
 #### 字符串转int数值
 ```
 class Solution {
