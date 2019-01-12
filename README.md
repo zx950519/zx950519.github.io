@@ -1277,6 +1277,35 @@ class Solution {
 ```
 
 ## 数学问题
+https://leetcode-cn.com/problems/nth-digit/submissions/  
+#### 第n个数字
+
+```
+class Solution {
+    public int findNthDigit(int n) {
+        int len = 1;
+		long num = 9;
+        int start = 0;
+		while (n > num*len) {
+			n -= len * num;
+			start+=num;
+			len++;
+			num *= 10;
+		}
+        System.out.println(n);
+        System.out.println(start);
+        System.out.println(num);
+        System.out.println(len);
+		int res;
+		if(n%len==0){
+			res = (""+(start+n/len)).charAt(len-1)-'0';
+		}else{
+			res = (""+(start+n/len+1)).charAt(n%len-1)-'0';
+		}
+		return res;
+    }
+}
+```
 #### 大数相加
 
 #### 大数相减
