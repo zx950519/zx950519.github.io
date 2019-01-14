@@ -1277,10 +1277,51 @@ class Solution {
 ```
 
 ## 数学问题
+
+#### 整数替换
+https://leetcode-cn.com/problems/integer-replacement/submissions/  
+
+```java
+class Solution {
+    public int integerReplacement(int n) {
+        return dp(n);
+    }
+    
+    public int dp(int n) {
+        if(n==1) 
+            return 0;
+        if(n%2==0)
+            return 1+dp(n/2);
+        else {
+            if(n==Integer.MAX_VALUE)
+                return dp(n-1);
+            else
+                return Math.min(dp(n-1), dp(n+1))+1;
+        }
+    }
+}
+// https://leetcode.com/problems/integer-replacement/discuss/87920/a-couple-of-java-solutions-with-explanations
+class Solution {
+    public int integerReplacement(int n) {
+        int c = 0;
+        while (n != 1) {
+            if ((n & 1) == 0) {
+                n >>>= 1;
+            } else if (n == 3 || Integer.bitCount(n + 1) > Integer.bitCount(n - 1)) {
+                --n;
+            } else {
+                ++n;
+            }
+            ++c;
+        }
+        return c;
+    }
+}
+```
+
 https://leetcode-cn.com/problems/nth-digit/submissions/  
 #### 第n个数字
-
-```
+```java
 class Solution {
     public int findNthDigit(int n) {
         int len = 1;
