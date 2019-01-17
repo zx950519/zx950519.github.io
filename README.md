@@ -1810,6 +1810,64 @@ D(m, n) = F(m) * C(m, n);其中F(m)是全错排数量,C(m, n)是组合数格式�
 
 ## 字符串问题
 
+#### KMP算法(Java实现)
+```java
+public class KMP {
+    public static int[] getNextArray(char[] t) {
+        int[] next = new int[t.length];
+        next[0] = -1;
+//        next[1] = 0;
+        int k;
+        for (int j = 1; j < t.length; j++) {
+            k = next[j-1];
+            while (k!=-1) {
+                if (t[j - 1] == t[k]) {
+                    next[j] = k + 1;
+                    break;
+                }
+                else {
+                    k = next[k];
+                }
+                next[j] = 0;  //当k==-1而跳出循环时，next[j] = 0，否则next[j]会在break之前被赋值
+            }
+        }
+        for(int i=0; i<next.length; i++) {
+            System.out.print(next[i]+" ");
+        }
+        System.out.println();
+        return next;
+    }
+    public static int kmpMatch(String s, String t){
+        char[] s_arr = s.toCharArray();
+        char[] t_arr = t.toCharArray();
+        int[] next = getNextArray(t_arr);
+        int i = 0, j = 0;
+        while (i<s_arr.length && j<t_arr.length){
+            if(j == -1 || s_arr[i]==t_arr[j]){
+                i++;
+                j++;
+            }
+            else
+                j = next[j];
+        }
+        if(j == t_arr.length)
+            return i-j;
+        else
+            return -1;
+    }
+    public static void main(String[] args) {
+        System.out.println(kmpMatch("abcabaabaabcacb", "abaabcac"));
+        System.out.println(kmpMatch("abcabaabaabcacb", "abazz"));
+        System.out.println(kmpMatch("bcabad", "bcaba"));
+    }
+}
+```
+参考:  
+- https://blog.csdn.net/v_july_v/article/details/7041827#
+- https://www.cnblogs.com/imzhr/p/9613963.html
+- https://www.jianshu.com/p/e2bd1ee482c3
+- https://blog.csdn.net/x__1998/article/details/79951598
+
 #### 最短字符串(在字符串前面添加字符将其转换为回文串。找到并返回可以用这种方式转换的最短回文串)
 ```
 class Solution {
