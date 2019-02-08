@@ -1810,6 +1810,61 @@ D(m, n) = F(m) * C(m, n);其中F(m)是全错排数量,C(m, n)是组合数格式�
 
 ## 字符串问题
 
+#### 回文字串(非暴力)
+https://leetcode-cn.com/problems/palindromic-substrings/submissions/  
+```java
+class Solution {
+    public int countSubstrings(String s) {
+        int len = s.length();
+        boolean[][] data = new boolean[len][len];
+        for(int i=0; i<len; i++)
+            data[i][i] = true;
+        int res = len;
+        for(int i=0; i+1<len; i++) {
+            if(s.charAt(i)==s.charAt(i+1)) {
+                data[i][i+1] = true;
+                res++;
+            }
+                
+        }
+        for(int i=2; i<len; i++) {
+            for(int j=0; j+i<len; j++) {
+                if(data[j+1][i+j-1] && s.charAt(j)==s.charAt(i+j)) {
+                    data[j][j+i] = true;
+                    res++;
+                }
+            }
+        }
+        return res;
+    }  
+}
+```
+```java
+class Solution {
+    public int countSubstrings(String s) {
+        int res = 0;
+        if (s == null){
+            return res;
+        }
+        int len = s.length();
+        for(int i=0; i<len; i++){
+            res += count(s, i, i);
+            res += count(s, i, i+1);
+        }
+        return res;
+    }
+    public static int count(String s,int beg,int end){
+        int count = 0;
+        while(beg>=0 && end<s.length() && s.charAt(beg)==s.charAt(end)) {
+            count++;
+            beg--;
+            end++;
+        }
+        return count;
+    }
+}
+```
+
 #### KMP算法(Java实现)
 ```java
 public class KMP {
