@@ -11,6 +11,8 @@ type: page
 
 ## 关于我
 
+![](http://ww1.sinaimg.cn/large/005L0VzSgy1g3cm95bpmuj305k05kjra.jpg)
+
 目前就读于杭州电子科技大学硕士研究生。
 
 研究方向为分布式机器学习，业务方向为后端开发。
