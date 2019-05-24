@@ -11,8 +11,6 @@ type: page
 
 ## 关于我
 
-<iframe src="https://githubbadge.appspot.com/gaohaoyang?s=1" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder="0"></iframe>
-
 目前就读于杭州电子科技大学硕士研究生。
 
 研究方向为分布式机器学习，业务方向为后端开发。
