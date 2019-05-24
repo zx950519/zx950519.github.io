@@ -24,7 +24,7 @@ type: page
 
 ## 联系我
 
-* GitHub：[Gaohaoyang](https://github.com/zx950519)
+* GitHub：[ZhouXiang](https://github.com/zx950519)
 * email：726710192@qq.com
 
 ## 关于本站
