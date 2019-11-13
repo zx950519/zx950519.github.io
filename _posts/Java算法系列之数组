@@ -1,0 +1,1579 @@
+---
+layout: post
+title:  "Java算法系列之数组"
+categories: Java
+tags:  Java 算法 数组
+---
+
+* content
+{:toc}
+
+本文系记录对Java算法中数组的一些积累，如有异议，欢迎联系我讨论修改。PS:图侵删！图片丢失请访问:[传送门]()
+
+
+
+
+
+
+## 扑克牌反转
+https://zhuanlan.zhihu.com/p/82019889
+```java
+import java.util.LinkedList;
+public class cardMove {
+    /**
+     * 1. 从牌顶拿出一张牌，放到桌子上
+     * 2. 从牌顶拿出一张牌，放在牌的底部
+     * 3. 重复第一步，第二步操作，知道所有的牌都放到了桌子上
+     *
+     * 问：已知桌子上牌的顺序是1,2,3,4,5,6,7,8,9,10,11,12,13
+     * 牌原来的顺序是什么
+     *
+     * 分析：如果这个操作倒着来
+     * 1. 从牌底部拿一张牌放到牌顶
+     * 2. 从桌子上拿一张牌放到牌顶
+     */
+    public static LinkedList<Integer> findCardLocation(int[] location){
+        // 如果桌子上没牌
+        if(location.length == 0){
+            return new LinkedList<>();
+        }
+        LinkedList<Integer> result = new LinkedList<>(); // 答案
+        for (int i = location.length - 1; i >=0; i--) {
+            if (result.size() > 0){
+                result.addFirst(result.removeLast());// 从牌底部拿一张到牌顶
+            }
+            result.addFirst(location[i]);
+        }
+        return result;
+    }
+    public static void main(String[] args) {
+        System.out.println(cardMove.findCardLocation(new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13}));
+        // 输出 [1, 12, 2, 8, 3, 11, 4, 9, 5, 13, 6, 10, 7]
+    }
+}
+```
+
+## 课程调度
+https://leetcode.com/problems/course-schedule/
+拓扑排序模板
+```java
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        if (numCourses<=0 || prerequisites==null || (prerequisites.length==1&&prerequisites[0]==null)) {
+            return false;
+        }
+        int[] inDegree = new int[numCourses];
+        List<Integer>[] map = new ArrayList[numCourses];
+        for (int i=0; i<prerequisites.length; i++) {
+            // prerequisites[i][1]表示先修课程
+            // prerequisites[i][0]表示后续课程
+            if (map[prerequisites[i][1]]==null) {
+                map[prerequisites[i][1]] = new ArrayList<>();
+            }
+            map[prerequisites[i][1]].add(prerequisites[i][0]);
+            inDegree[prerequisites[i][0]]++;    // 后续课程作为入度
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for (int i=0; i<inDegree.length; i++) {
+            if (inDegree[i]==0) {
+                q.offer(i);
+            }
+        }
+        while (!q.isEmpty()) {
+            int tmp = q.poll();
+            if (map[tmp]!=null) {
+                for (int i=0; i<map[tmp].size(); i++) {
+                    if (--inDegree[map[tmp].get(i)]==0) {
+                        q.offer(map[tmp].get(i));
+                    }
+                }
+            }
+        }
+        for (int i=0; i<inDegree.length; i++) {
+            if (inDegree[i]!=0) {
+                return false;
+            }
+        } 
+        return true;
+    }
+}
+```
+
+## 滑稽树(生成所有真分数)
+自制版
+```java
+import java.util.*;
+public class Main{
+    public static void main (String[] args) {
+        Queue<fx> queue = new LinkedList<>();
+        queue.offer(new fx(1, 1, 0,0,0,0,false, false));
+        int index = 0;
+        int[] molecule = new int[5000];
+        int[] denominator = new int[5000];
+        while (!queue.isEmpty()) {
+            fx tmp = queue.poll();
+//            System.out.println(tmp.high+" / "+tmp.low);
+            if (index>20) {
+                break;
+            }
+            molecule[index] = tmp.high;
+            denominator[index] = tmp.low;
+            index++;
+            fx leftson = null;
+            fx rightson = null;
+            if (tmp.left==false && tmp.right==false) {
+                leftson = new fx(tmp.high, tmp.low+1, 0, 0, tmp.high, tmp.low, false, true);
+                rightson = new fx(tmp.high+1, tmp.low, tmp.high, tmp.low, 0, 0, true, false);
+            }
+            else if (tmp.left==false && tmp.right==true) {
+                leftson = new fx(tmp.high, tmp.low+1, 0, 0, tmp.high, tmp.low, false, true);
+                rightson = new fx(tmp.high+tmp.right_high, tmp.low+tmp.right_low, tmp.high, tmp.low, tmp.right_high, tmp.right_high, true, true);
+            }
+            else if (tmp.left==true && tmp.right==false) {
+                leftson = new fx(tmp.high+tmp.left_high, tmp.low+tmp.left_low, tmp.left_high, tmp.left_low, tmp.high, tmp.low, true, true);
+                rightson = new fx(tmp.high+1, tmp.low, tmp.high, tmp.low, 0, 0, true, false);
+            }
+            else {
+                leftson = new fx(tmp.high+tmp.left_high, tmp.low+tmp.left_low, tmp.left_high, tmp.left_low, tmp.high, tmp.low, true, true);
+                rightson = new fx(tmp.high+tmp.right_high, tmp.low+tmp.right_low, tmp.high, tmp.low, tmp.right_high, tmp.right_low, true, true);
+            }
+            queue.offer(leftson);
+            queue.offer(rightson);
+        }
+
+        Scanner sc = new Scanner(System.in);
+        int row = sc.nextInt();
+        int col = sc.nextInt();
+//        int len = (int)(1*(1-Math.pow(2, row-1))/(-1));
+//        len += col;
+        int len = 0;
+        for (int i=0; i<molecule.length; i++) {
+            if (row==molecule[i] && col==denominator[i]) {
+                len = i;
+                break;
+            }
+        }
+        int lev = 1;
+        int base = 1;
+        int sum = 0;
+        int prelev = 0;
+        int presum = 0;
+        while (sum<=len) {
+            presum = sum;
+            prelev = lev;
+            sum += base;
+            base *=2;
+            lev++;
+        }
+        System.out.println(prelev+" "+(len-presum+1));
+//        System.out.println(molecule[len-1]+" / "+denominator[len-1]);
+
+    }
+
+}
+
+class fx{
+    int high;
+    int low;
+    boolean left;
+    boolean right;
+    int left_high;
+    int left_low;
+    int right_high;
+    int right_low;
+
+    public fx(int high, int low, int left_high, int left_low, int right_high, int right_low, boolean left, boolean right) {
+        this.high = high;
+        this.low = low;
+        this.left_high = left_high;
+        this.left_low = left_low;
+        this.right_high = right_high;
+        this.right_low = right_low;
+        this.left = left;
+        this.right = right;
+    }
+
+}
+```
+
+## 网易-牛牛找工作
+https://www.nowcoder.com/practice/46e837a4ea9144f5ad2021658cb54c4d?tpId=98&tqId=32824&tPage=1&rp=1&ru=/ta/2019test&qru=/ta/2019test/question-ranking  
+本题的解法充分利用了TreeMap的floorKey方法，用于搜索第一个键值小于等于目标值的键。  
+```java
+import java.lang.reflect.Array;
+import java.util.*;
+public class Main{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        TreeMap<Integer, Integer> tree = new TreeMap<>();
+        int[] di = new int[n];
+        for (int i=0; i<n; i++) {
+            di[i] = sc.nextInt();
+            int pi = sc.nextInt();
+            if (!tree.containsKey(di[i]) || tree.get(di[i])<pi) {
+                tree.put(di[i], pi);
+            }
+        }
+        Arrays.sort(di);
+        int max = 0;
+        for (int i=0; i<n; i++) {
+            if (tree.get(di[i])<max) {
+                tree.put(di[i], max);
+            }
+            else {
+                max = tree.get(di[i]);
+            }
+        }
+        for (int i=0; i<m; i++) {
+            int test = sc.nextInt();
+            if (tree.floorKey(test)==null) {
+                System.out.println(0);
+                continue;
+            }
+            System.out.println(tree.get(tree.floorKey(test)));
+        }
+    }
+}
+```
+
+## 数组中的最大连续子数组之积
+https://leetcode.com/problems/maximum-product-subarray/
+```java
+class Solution {
+    public int maxProduct(int[] nums) {
+        if (nums==null || nums.length==0) {
+            return 0;
+        }
+        int max = nums[0];
+        int last_max = nums[0];
+        int last_min = nums[0];
+        for (int i=1; i<nums.length; i++) {
+            int cmax = Math.max(Math.max(nums[i], nums[i]*last_max), nums[i]*last_min);
+            int cmin = Math.min(Math.min(nums[i], nums[i]*last_max), nums[i]*last_min);
+            last_max = cmax;
+            last_min = cmin;
+            max = Math.max(last_max, max);
+        }
+        return max;
+    }
+}
+```
+
+## 找到第一个重复的数
+https://leetcode.com/problems/find-the-duplicate-number/
+```java
+class Solution {
+    public int findDuplicate(int[] nums) {
+        nums[0] = -1*nums[0];
+        for(int num=0; num<nums.length; num++){
+            int target = Math.abs(nums[num]);
+            nums[target] = -1*nums[target];
+            if(nums[Math.abs(nums[num])] > 0)
+                return Math.abs(nums[num]);
+        }
+        return -1;
+    }
+}
+```
+
+## 下一个排列
+https://leetcode.com/problems/next-permutation/submissions/
+```java
+class Solution {
+    public void nextPermutation(int[] nums) {
+        if (nums==null || nums.length==0) {
+            return ;
+        }
+        if (nums.length==1) {
+            return;
+        }
+        int low = -1;
+        int high = nums.length-1;
+        int mid = -1;
+        for (int i=nums.length-2; i>=0; i--) {
+            if (nums[i]<nums[i+1]) {
+                low = i;
+                break;
+            }
+        }
+        if (low<0) {
+            low = 0;
+            while (low<high) {
+                swap(nums, low, high);
+                low++;
+                high--;
+            }
+            return;
+        }
+        else {
+            for (int j=nums.length-1; j>low; j--) {
+                if (nums[j]>nums[low]) {
+                    mid = j;
+                    break;
+                }
+            }
+            swap(nums, low, mid);
+            low++;
+            high = nums.length-1;
+            while (low<high) {
+                swap(nums, low, high);
+                low++;
+                high--;
+            }
+        }
+    }
+    
+    public void swap(int[] data, int low, int high) {
+        data[low] = data[low] ^ data[high];
+        data[high] = data[low] ^ data[high];
+        data[low] = data[low] ^ data[high];
+    }
+}
+```
+
+## 寻找峰值
+https://www.lintcode.com/problem/find-peak-element/description  
+```java
+public class Solution {
+    int index = 0;
+    boolean find = false;
+    public int findPeak(int[] A) {
+        // write your code here
+        dfs(A, 0, A.length-1);
+        return index;
+    }
+    public void dfs(int[] A, int low, int high) {
+        if (low>high || find) {
+            return;
+        }
+        int mid = low + (high-low)/2;
+        if (mid==0 || mid==A.length-1) {    // 处理边界值
+            return;
+        }
+        if (A[mid]>A[mid-1] && A[mid]>A[mid+1]) {
+            index = mid;
+            find = true;
+            return;
+        }
+        dfs(A, low, mid-1);
+        dfs(A, mid+1, high);
+    }
+}
+```
+
+## 骰子求和
+https://www.lintcode.com/problem/dices-sum/solution
+```java
+public class Solution {
+    public List<Map.Entry<Integer, Double>> dicesSum(int n) {
+        // Write your code here
+        // Ps. new AbstractMap.SimpleEntry<Integer, Double>(sum, pro)
+        // to create the pair
+        
+        double[][] dp = new double[1+n][1+6*n];
+        for (int i=1; i<=6; i++) {
+            dp[1][i] = 1.0/6;
+        }
+        for (int i=2; i<=n; i++) {
+            for (int j=i; j<=6*n; j++) {
+                for (int k=1; k<=6; k++) {
+                    if (j>k) {
+                        dp[i][j] += dp[i-1][j-k];
+                    }
+                }
+                dp[i][j] /= 6.0;
+            }
+        }
+        Map<Integer, Double> map = new HashMap<>();
+        for (int i=n; i<= 6*n; ++i) {
+            map.put(i, dp[n][i]);
+        }
+        List<Map.Entry<Integer, Double>> results = new ArrayList<Map.Entry<Integer, Double>>(map.entrySet());
+            
+        return results;
+    }
+}
+```
+
+## 整数中1出现的次数
+https://www.nowcoder.com/practice/bd7f978302044eee894445e244c7eee6?tpId=13&tqId=11184&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
+```java
+public class Solution {
+    public int NumberOf1Between1AndN_Solution(int n) {
+        if (n < 1)
+            return 0;
+        int base = 1;
+        int sum = 0;
+        int round = n;
+        while (round>0) {
+            int ge = round%10;
+            round /= 10;
+            sum += round*base;
+            if (ge==1) {
+                sum += (n%base)+1;
+            }
+            else if(ge>1) {
+                sum += base;
+            }
+            base *= 10;
+        }
+        return sum;
+    }
+}
+```
+
+## 数字序列中的某一位数字
+剑指offer44
+```java
+public class Main {
+    public static void main(String[] args) {
+
+        System.out.println(digitAtIndex(190));
+
+    }
+    
+    public static int digitAtIndex(int index) {
+        if (index<0) {
+            return -1;
+        }
+        int base = 1;
+        while (true) {
+            int digitNumber = countOfNumbersFor(base);          // 本轮最大数字数量
+            int maxAvaiableNumber = digitNumber * base;         // 本轮最大可移动位数
+            if (index<maxAvaiableNumber) {                      // 已经无法进入下一轮
+                return digitAtIndex(index, base);
+            }
+            else {
+                index -= maxAvaiableNumber;
+                base++;                                         // base进一位
+            }
+        }
+    }
+
+    private static int countOfNumbersFor(int digits) {
+        if (digits==1) {
+            return 10;
+        }
+        int count = (int) Math.pow(10, digits-1);
+        return 9*count;
+    }
+
+    public static int digitAtIndex(int index, int base) {
+        int number = beginNumberFor(base) + index / base;       // 搜寻目标数字
+
+        int indexFormRight = base - index % base;
+        System.out.println(number+" @@# "+indexFormRight);
+        for (int i=1; i<indexFormRight; i++) {
+            number /= 10;
+        }
+        return number%10;
+    }
+
+    // 返回base位数的第一个数字
+    public static int beginNumberFor(int digits) {
+        if (digits==1) {
+            return 0;
+        }
+        return (int) Math.pow(10, digits-1);
+    }
+
+}
+
+```
+
+## 逆序对
+https://www.lintcode.com/problem/reverse-pairs/description
+```java
+public class Solution {
+    /**
+     * @param A: an array
+     * @return: total of reverse pairs
+     */
+    public long reversePairs(int[] A) {
+        // write your code here
+        if (A==null || A.length==0) {
+            return 0;
+        }
+        int[] copy = new int[A.length];
+        for (int i=0; i<A.length; i++) {
+            copy[i] = A[i];
+        }
+        int count = func(A, copy, 0, A.length-1);
+        for (int i=0; i<A.length; i++) {
+            System.out.print(copy[i]+" ");
+        }
+        return count;
+    }
+    
+    public int func(int[] data, int[] copy, int start, int end) {
+        if (start==end) {
+            copy[start] = data[start];
+            return 0;
+        }
+        int len = (end-start)/2;
+        // int left = func(data, copy, start, start+len);
+        // int right = func(data, copy, start+len+1, end);
+        int left = func(copy, data, start, start+len);
+        int right = func(copy, data, start+len+1, end);
+        int i = start+len;  // 从尾部向前查找
+        int j = end;
+        int indexCopy = end;
+        int count = 0;
+        while (i>=start && j>=start+len+1) {
+            if (data[i]>data[j]) {
+                copy[indexCopy--] = data[i--];
+                count = count+j-start-len;  // 注意这里增量的定义
+            }
+            else {
+                copy[indexCopy--] = data[j--];
+            }
+        } 
+        for (; i>=start; --i) {
+            copy[indexCopy--] = data[i];
+        }
+        for (; j>=start+len+1; --j) {
+            copy[indexCopy--] = data[j];
+        }
+        return left+right+count;
+    }
+}
+```
+
+## 岛屿数量
+https://leetcode-cn.com/problems/number-of-islands/  
+```java
+class Solution {
+    public int numIslands(char[][] grid) {
+        if (grid==null || (grid.length==1&&grid[0].length==0) || grid.length==0) {
+            return 0;
+        }
+        int res = 0;
+        boolean[][] vis = new boolean[grid.length][grid[0].length];
+        for (int i=0; i<grid.length; i++) {
+            for (int j=0; j<grid[0].length; j++) {
+                if (grid[i][j]=='1' && vis[i][j]==false) {
+                    res++;
+                    dfs(grid, vis, i, j);
+                }
+            }
+        }
+        return res;
+    }
+    public void dfs(char[][] grid, boolean[][] vis, int i, int j) {
+        if (i>=0 && i<grid.length && j>=0 && j<grid[0].length) {
+            
+        }
+        else {
+            return;
+        }
+        if (vis[i][j]==true || grid[i][j]!='1') {
+            return;
+        }
+        vis[i][j] = true;
+        dfs(grid, vis, i+1, j);
+        dfs(grid, vis, i, j+1);
+        dfs(grid, vis, i-1, j);
+        dfs(grid, vis, i, j-1);
+    }
+}
+```
+
+## 之字形打印矩阵
+```java
+import java.util.*;
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+//        int[][] matrix = { {1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16} };
+//        int[][] matrix = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9} };
+        int[][] matrix = { {1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+//        int[][] matrix = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}, {13, 14, 15}, {16, 17, 18}};
+        List<Integer> res = zig(matrix);
+        for (int i=0; i<res.size(); i++) {
+            System.out.print(res.get(i)+" ");
+        }
+        System.out.println();
+    }
+    public static List<Integer> zig(int[][] mat) {
+        int[] leftDown = {0, 0};
+        int[] rightUp = {0, 0};
+        boolean turnUp = true;
+        int row = mat.length;
+        int col = mat[0].length;
+        List<Integer> res = new ArrayList<>();
+        while (leftDown[1] <= col-1) {
+            dfs(leftDown, rightUp, turnUp, mat, res);
+            turnUp = !turnUp;   // 转换方向
+            if (leftDown[0]<row-1) {    // 左下角行坐标是否可以加1
+                leftDown[0]++;
+            }
+            else {                      // 左下角列坐标加1
+                leftDown[1]++;
+            }
+            if (rightUp[1]<col-1) {     // 右上角列坐标尝试加1
+                ++rightUp[1];
+            }
+            else {                      // 右角行坐标加1
+                ++rightUp[0];
+            }
+        }
+        return res;
+    }
+    public static void dfs(int[] leftDown, int[] rightUp, boolean turnUp, int[][] mat, List<Integer> res) {
+        int i, j;
+        if (turnUp) {   // 向上
+            i = leftDown[0];
+            j = leftDown[1];
+            while (j<=rightUp[1]) {         // 活动点列坐标不大于右上角的列坐标
+                res.add(mat[i--][j++]);
+            }
+        }
+        else {
+            i = rightUp[0];
+            j = rightUp[1];
+            while (i<=leftDown[0]) {        // 活动点行坐标不大于左下角的行坐标
+                res.add(mat[i++][j--]);
+            }
+        }
+    }
+}
+```
+
+## 螺旋矩阵
+https://leetcode-cn.com/problems/spiral-matrix/  
+```java
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        
+        if (matrix==null || matrix.length==0 || (matrix.length==1 && matrix[0].length==0)) {
+            return new ArrayList<>();
+        }
+        
+        List<Integer> res = new ArrayList<>();
+        int[] leftUp = {0, 0};
+        int[] rightDown = {matrix.length-1, matrix[0].length-1};
+        while (leftUp[0]<=rightDown[0] && leftUp[1]<=rightDown[1]) {
+            dfs(leftUp, rightDown, matrix, res);
+            ++leftUp[0];
+            ++leftUp[1];
+            --rightDown[0];
+            --rightDown[1];
+            // System.out.println("LeftUp: "+leftUp[0]+"  "+leftUp[1]);
+            // System.out.println("RightDown: "+rightDown[0]+"  "+rightDown[1]);
+        }
+        return res;
+    }
+    public void dfs(int[] leftUp, int[] rightDown, int[][] matrix, List<Integer> list) {
+        if (leftUp[0]==rightDown[0] && leftUp[1]==rightDown[1]) {
+            list.add(matrix[leftUp[0]][rightDown[0]]);
+            return;
+        }
+        if (leftUp[0]==rightDown[0]) {
+            for (int i=leftUp[1]; i<=rightDown[1]; i++) {
+                list.add(matrix[leftUp[0]][i]);
+            }
+            return;
+        }
+        if (leftUp[1]==rightDown[1]) {
+            for (int i=leftUp[0]; i<=rightDown[0]; i++) {
+                list.add(matrix[i][leftUp[0]]);
+            }
+            return;
+        }
+        int i = leftUp[0];
+        int j = leftUp[1];
+        while (j<rightDown[1]) {
+            list.add(matrix[i][j++]);
+        }
+        while (i<rightDown[0]) {
+            list.add(matrix[i++][j]);
+        }
+        while (j>leftUp[1]) {
+            list.add(matrix[i][j--]);
+        }
+        while (i>leftUp[0]) {
+            list.add(matrix[i--][j]);
+        }
+    }
+}
+```
+
+## 荷兰国旗问题
+给定一个数组arr，和一个数num，请把小于num的数放在数组的左边，等于num的数放在数组的中间，大于num的数放在数组的右边。
+```java
+public class Main {
+    public static void main(String[] args) {
+        int arr[] = {1,2, 1, 5, 4, 7, 2, 3, 9,1};
+        part(arr, 0, arr.length-1, 5);
+
+    }
+    public static void print(int[] arr, int index, int L, int R) {
+        System.out.print("正在处理: "+index+"   ");
+        for (int i=0; i<arr.length; i++) {
+            System.out.print(arr[i]+" ");
+        }
+        System.out.println("左边界L="+L+"  右边界R="+R);
+    }
+    public static void swap(int[] data, int i, int j) {
+        int tmp = data[i];
+        data[i] = data[j];
+        data[j] = tmp;
+    }
+    public static void part(int[] data, int start, int end, int target) {
+        int i = start, L = start-1, R = end+1;
+        while (i<=R-1) {
+            if (data[i]<target) {
+                swap(data, (i++), (++L));
+            }
+            else if (data[i]>target) {
+                swap(data, i, (--R));
+            }
+            else {
+                i++;
+            }
+            print(data, i, L, R);
+        }
+    }
+}
+```
+
+## 二维子矩阵和(容斥原理)
+给你一个二维矩阵以及左上角，右下角坐标(row1,col1,row2,col2)，求该坐标对应的子矩阵和  
+https://leetcode.com/problems/range-sum-query-2d-immutable/  
+```java
+class NumMatrix {
+    int[][] dp;
+    public NumMatrix(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) 
+            return;
+        int n = matrix.length;
+        int m = matrix[0].length;
+        dp = new int[n+1][m+1];
+        for (int i=1; i<=n; i++) {
+            for (int j=1; j<=m; j++) {
+                dp[i][j] = matrix[i-1][j-1] + dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1];
+            }
+        }
+    }
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        return dp[row2+1][col2+1] - dp[row2+1][col1]-dp[row1][col2+1]+dp[row1][col1];
+    }
+}
+```
+参考:https://www.jianshu.com/p/f21887e0ec3d  
+
+## 大矩阵的子矩阵最大和
+参考动态规划专题中——寻找最大子数列(一维Kadane问题)  
+参考动态规划专题中——寻找子矩阵最大和(二维Kadane问题)  
+参考：  
+https://blog.csdn.net/u010167269/article/details/51734723  
+https://www.nowcoder.com/questionTerminal/840eee05dccd4ffd8f9433ce8085946b  
+https://www.cnblogs.com/AndyJee/p/4817894.html  
+
+## 总和为K的子矩阵个数
+```java
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+
+        int[][] data = {{1, 0, 1}, {2, 0, 2}, {1, 1, 1}};
+
+        System.out.println(submatrixSum(data, 3));
+    }
+    public static int submatrixSum(int[][] matrix, int target) {
+        int res = 0;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[][] sum = new int[m + 1][n + 1];    // 扩充两个维度
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                sum[i][j] = matrix[i - 1][j - 1] + sum[i][j - 1] + sum[i - 1][j] - sum[i - 1][j - 1];   // 容斥原理
+            }
+        }
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                for (int k = i; k <= m; k++) {
+                    for (int l = j; l <= n; l++) {
+                        // k与l是右下角的坐标，i与j是左上角坐标
+                        if (sum[k][l] - sum[k][j - 1] - sum[i - 1][l] + sum[i - 1][j - 1] == target) {
+                            res++;
+                            System.out.println("左上角:("+(i-1)+", "+(j-1)+") 右下角:("+(k-1)+", "+(l-1)+")");
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
+```
+参考：  
+http://www.itkeyword.com/doc/9592694716686156x550/number-of-submatrix-with-sum-k  
+https://www.cnblogs.com/charlesblc/p/5620066.html  
+https://www.jianshu.com/p/78e1dd3153cb  
+https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane's_algorithm  
+
+## 总和不超过K的子矩阵个数
+https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/  
+使用总和为K的子矩阵个数进行预处理，然后暴力打表
+```java
+class Solution {
+    int[][] dp;
+    public int maxSumSubmatrix(int[][] matrix, int k) {
+        if (matrix == null || matrix.length == 0) 
+            return 0;
+        int n = matrix.length;
+        int m = matrix[0].length;
+        dp = new int[n+1][m+1];
+        for (int i=1; i<=n; i++) {
+            for (int j=1; j<=m; j++) {
+                dp[i][j] = matrix[i-1][j-1] + dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1];
+            }
+        }
+        int res = Integer.MIN_VALUE;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                for (int a=i; a<n; a++) {
+                    for (int b=j; b<m; b++) {
+                        int tmp = sumRegion(i, j, a, b);
+                        if (tmp<=k) {
+                            res = Math.max(res, tmp);
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        return dp[row2+1][col2+1] - dp[row2+1][col1]-dp[row1][col2+1]+dp[row1][col1];
+    }
+}
+```
+
+参考:  
+https://www.cnblogs.com/grandyang/p/5617660.html
+
+## 牛牛数星星(二维前缀和)
+https://www.nowcoder.com/questionTerminal/1bf5b56583f747e98741e37652e5a63e?toCommentId=1451625  
+题解：https://blog.csdn.net/PZHU_CG_CSDN/article/details/80873704  
+```c++
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <cmath>
+#include <map>
+using namespace std;
+const int maxn = 1000 + 5;
+int m[maxn][maxn];
+int num[maxn][maxn];
+int n;
+int cnt;
+
+int main(void){
+    cin>>n;
+    int x,y;
+    for(int i = 0;i < n;i++){
+        cin>>x>>y;
+        m[x][y]++;
+    }
+    for(int i = 0;i < maxn;i++)
+        for(int j = 0;j < maxn;j++){
+            num[i][j] = num[i-1][j] + num[i][j-1] + m[i][j] - num[i-1][j-1];
+        }
+    cin>>cnt;
+    for(int i = 0;i < cnt;i++){
+        int a1,b1,a2,b2;
+        cin>>a1>>b1>>a2>>b2;
+        cout<<num[a2][b2] - num[a1-1][b2] - num[a2][b1-1] + num[a1-1][b1-1]<<endl;
+    }
+    return 0;
+}
+```
+```java
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int[][] m = new int[1001][1001];
+        int[][] data = new int[1001][1001];
+        for (int i=0; i<n; i++) {
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            m[x][y]++;
+        }
+        for (int i=1; i<1001; i++) {
+            for (int j=1; j<1001; j++) {
+                data[i][j] = data[i-1][j]+data[i][j-1]+m[i][j]-data[i-1][j-1];
+            }
+        }
+        int que = scanner.nextInt();
+        for (int i=0; i<que; i++) {
+            int a = scanner.nextInt();
+            int b = scanner.nextInt();
+            int c = scanner.nextInt();
+            int d = scanner.nextInt();
+            System.out.println(data[c][d] - data[a-1][d] - data[c][b-1] + data[a-1][b-1]);
+        }
+    }
+}
+```
+![](http://ww1.sinaimg.cn/large/005L0VzSgy1g32d67dyuij30qy0qn750.jpg)
+
+## 牛牛数星星变种(二维前缀和)
+https://blog.csdn.net/XT_NOI/article/details/72715904  
+```java
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
+#include <cmath>
+#include <algorithm>
+using namespace std;
+
+const int MAXN=1010;
+
+int n,m,a[MAXN][MAXN];
+
+//读入优化 
+int read(){
+	char ch=getchar();
+	bool fl=0;
+	int r=0;
+	if(ch=='-'){
+		fl=1;
+		ch=getchar();
+	} 
+	while(ch>='0'&&ch<='9'){
+		r*=10;
+		r+=ch-'0';
+		ch=getchar();
+	}
+	return fl?-r:r; 
+}
+
+//输出优化 
+void write(int x){
+	if(x<0){
+		putchar('-');
+		x=-x;
+	}
+	if(x>9){
+		write(x/10);
+	}
+	putchar(x%10+'0');
+}
+
+int main(){
+	freopen("in.txt","r",stdin);
+	freopen("std.txt","w",stdout);
+	n=read();
+	m=read();
+	//前n项子矩阵和求法，O(n*n)复杂度 
+	a[0][0]=read();
+	for(int i=1;i<n;++i){
+		a[0][i]=read();
+		a[0][i]+=a[0][i-1];
+	}
+	for(int i=1;i<n;++i){
+		a[i][0]=read();
+		a[i][0]+=a[i-1][0];
+		for(int j=1;j<n;++j){
+			a[i][j]=read();
+			a[i][j]=a[i][j]+a[i-1][j]+a[i][j-1]-a[i-1][j-1];
+		}
+	}
+	for(int i=0;i<m;++i){
+		int x,y,x1,y1;
+		x=read();
+		y=read();
+		x1=read();
+		y1=read();
+		if(x==1 && y==1){
+			write(a[x1-1][y1-1]); 
+		}else if(x==1){
+			write(a[x1-1][y1-1]-a[x1-1][y-2]);
+		}else if(y==1){
+			write(a[x1-1][y1-1]-a[x-2][y1-1]);
+		}else{
+			write(a[x1-1][y1-1]-a[x-2][y1-1]-a[x1-1][y-2]+a[x-2][y-2]);//输出结果，单次O(1)，总共O(m) 
+		}
+		//这里我一开始犯了个致命的错误，当我和我的暴力程序打对拍的时候才发现
+		//当x或者y为1的时候，我们可能不需要减去某些不存在的矩阵
+		//如果你是按照1为数组第一个数的下标的时候是完全不需要考虑这个问题的
+		//因为0下标的一定是0
+		//但对于我的程序，我作为一名专业的程序员 不是很喜欢1开始，所以这里我发现了致命的越界问题
+		//这也是导致我在对拍的时候爆0的原因
+		//所以我才会用连环的if-else-if来解决这个问题 
+		putchar('\n');
+	}
+	return 0;
+} 
+```
+
+## 跳跃游戏
+https://leetcode-cn.com/problems/jump-game/
+```java
+class Solution {
+    public boolean canJump(int[] nums) {
+        if (nums.length==1 && nums[0]==0)
+            return true;
+        for (int i=0; i<nums.length; i++) {
+            if (nums[i]==0) {
+                boolean flag = false;
+                for (int j=0; j<i; j++) {
+                    if (j+nums[j]>i || (j+nums[j]==i && i==nums.length-1)) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag==false)
+                    return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+## 接雨水
+https://leetcode-cn.com/problems/trapping-rain-water/  
+```java
+class Solution {
+    public int trap(int[] height) {
+        int max = -1;
+        int mid = 0;
+        for (int i=0; i<height.length; i++) {
+            if (height[i]>max) {
+                mid = i;
+                max = height[i];
+            }
+        }
+        int res = 0;
+        int l = 0;
+        for (int i=0; i<mid; i++) {
+            if (height[i]<=height[l]) {
+                res += height[l] - height[i];
+            }
+            else {
+                l = i;
+            }
+        }
+        int r = height.length-1;
+        for (int i=height.length-1; i>mid; i--) {
+            if (height[i]<=height[r]) {
+                res += height[r] - height[i];
+            }
+            else {
+                r = i;
+            }
+        }
+        return res;
+    }
+}
+```
+
+## 不同路径 II
+https://leetcode-cn.com/problems/unique-paths-ii/  
+```java
+class Solution {
+    boolean[][] flag;
+    int res = 0;
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        for(int i = 0; i<obstacleGrid.length;i++){
+            for(int j = 0 ; j<obstacleGrid[i].length;j++){
+                if(obstacleGrid[i][j] == 1){
+                    obstacleGrid[i][j] = 0;
+                    continue;
+                }
+                if(i==0&&j==0){
+                    obstacleGrid[i][j] = 1;
+                    continue;
+                }
+                if(i==0 || j==0){
+                    obstacleGrid[i][j] = i==0?obstacleGrid[i][j-1]:obstacleGrid[i-1][j];
+                    continue;
+                }
+                obstacleGrid[i][j] = obstacleGrid[i-1][j]+obstacleGrid[i][j-1];
+            }
+        }
+        return obstacleGrid[obstacleGrid.length-1][obstacleGrid[0].length-1];
+    }
+
+}
+```
+
+## 子集2
+https://leetcode-cn.com/problems/subsets-ii/  
+给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。说明：解集不能包含重复的子集。  
+```java
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Map<String, String> map = new HashMap();
+        List<List<Integer>> res = new ArrayList<>();
+        
+        for (int i=0; i<Math.pow(2, nums.length); i++) {
+            List<Integer> tmp = new ArrayList<>();
+            int index = i;
+            for (int j=0; j<nums.length; j++) {
+                if ((index&1)==1) {
+                    tmp.add(nums[j]);
+                }
+                index >>= 1;
+            }
+            String val = list2string(tmp);
+            Collections.sort(tmp);
+            String ke = list2string(tmp);
+            if (!map.containsKey(ke)) {
+                map.put(ke, val);
+            }
+        }
+        
+        for (Map.Entry<String, String> entry: map.entrySet()) {
+            List<Integer> tmp = new ArrayList<>();
+            if (entry.getKey()=="") {
+                
+            }
+            else {
+                tmp = string2list(entry.getValue());
+            }
+            res.add(tmp);
+        }
+        return res;
+    }
+    
+    public String list2string(List<Integer> input) {
+        StringBuffer sb = new StringBuffer();
+        for (Integer ipz: input) {
+            sb.append(ipz+",");
+        }
+        return sb.toString();
+    }
+    public List<Integer> string2list(String input) {
+        List<Integer> res = new ArrayList<>();
+        if (!input.equals("")) {
+            String[] tmp = input.split(",");
+            for (int i=0; i<tmp.length; i++) {
+                res.add(Integer.parseInt(tmp[i]));
+            }
+        }
+        return res;
+    }
+}
+```
+
+## 最长重复子数组
+https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/  
+dp问题  
+```java
+class Solution {
+    public int findLength(int[] A, int[] B) {
+        int[][] data = new int[A.length+1][B.length+1];
+        int res = 0;
+        for (int i=1; i<=A.length; i++) {
+            for (int j=1; j<=B.length; j++) {
+                if (A[i-1]==B[j-1]) {
+                    data[i][j] = data[i-1][j-1]+1;
+                }
+                else {
+                    data[i][j] = 0;
+                }
+                res = Math.max(res, data[i][j]);
+            }
+        }
+        return res;
+    }
+}
+```
+
+## 乘积小于K的子数组
+https://leetcode-cn.com/problems/subarray-product-less-than-k/  
+尺取法实践  
+```java
+import java.util.*;
+class Solution {
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+        if (nums==null || nums.length==0) {return 0;}
+        int res = 0;
+        int l = 0, r = 0;
+        int tmp = 1;
+        while (r<nums.length) {
+            tmp *= nums[r++];
+            while (l<r && tmp>=k) {
+                tmp /= nums[l++];
+            }
+            res += r-l;
+        }
+        return res;
+    }
+}
+```
+
+## 下一个排列
+https://leetcode-cn.com/problems/next-permutation/  
+```java
+class Solution {
+    public void nextPermutation(int[] nums) {
+        if (nums==null || nums.length==0) {return;}
+        int i = nums.length-2;
+        for (; i>=0&&nums[i]>=nums[i+1]; --i) {}
+        if(i>=0) {
+            int j=i+1;
+            for(; j<nums.length&&nums[j]>nums[i]; j++) {}
+            swap(nums, i, j-1);
+        }
+        int k = nums.length-1;
+        i++;
+        for (; i<k; i++, k--) {
+            swap(nums, i, k);
+        }
+    }
+    public void swap(int[] data, int i, int j) {
+        int tmp = data[i];
+        data[i] = data[j];
+        data[j] = tmp;
+    }
+}
+```
+
+## 删除排序数组中的重复项 II
+https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/  
+给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。  
+```java
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int tmp = 0;
+        for (int i=0; i<nums.length; i++) {
+            if (tmp<2 || nums[i]>nums[tmp-2]) {
+                nums[tmp++] = nums[i]; 
+                // System.out.println("nums["+(tmp-1)+"]= "+nums[tmp-1]);
+            }
+        }
+        return tmp;
+    }
+}
+```
+
+## 和为K的子数组
+https://leetcode-cn.com/problems/subarray-sum-equals-k/submissions/  
+![](http://ww1.sinaimg.cn/large/005L0VzSly1g1okmbt5d3j30ha0av3z7.jpg)  
+```java
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        if (nums==null || nums.length==0) {return 0;}
+        if (nums.length==1) {
+            if(nums[0]==k)
+                return 1;
+            else
+                return 0;
+        }
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+        int sum = 0, count = 0;
+        for (int i=0; i<nums.length; i++) {
+            sum += nums[i];
+            if (map.containsKey(sum-k)) {
+                count += map.get(sum-k);
+            }
+            map.put(sum, map.getOrDefault(sum, 0)+1);
+        }
+        return count;
+    }
+}
+```
+
+## 到达终点数字
+在一根无限长的数轴上，你站在0的位置。终点在target的位置。每次你可以选择向左或向右移动。第 n 次移动（从 1 开始），可以走 n步。返回到达终点需要的最小移动次数。  
+```java
+class Solution {
+    public int reachNumber(int target) {
+        if(target==0)
+            return 0;
+        target = Math.abs(target);
+        int res = 0;
+        int tmp = 1;
+        int sum = 0;
+        while(true) {
+            sum += tmp;
+            tmp++;
+            res++;
+            if(sum==target) {
+                return res;
+            }
+            if(sum>target && (sum-target)%2==0) {
+                return res;
+            }
+        }
+    }
+}
+```
+
+## 最长连续序列
+给定一个未排序的整数数组，找出最长连续序列的长度。要求算法的时间复杂度为 O(n)。  
+```java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        Map<Integer, Integer> map = new TreeMap<>();
+        for(int i=0; i<nums.length; i++) {
+            map.put(nums[i], 1);
+        }
+        int ind = 0, last = 0, res = 0, tmp = 0;
+        for(Map.Entry<Integer, Integer> entry: map.entrySet()) {
+            if(ind==0) {
+                last = entry.getKey();
+                ind++;
+                tmp = 1;
+            }
+            else {
+                ind++;
+                if(entry.getKey()-last==1) {
+                    tmp++;
+                }
+                else {
+                    tmp = 1;
+                }
+                last = entry.getKey();
+            }
+            res = Math.max(res, tmp);
+        }
+        return res;
+    }
+}
+```
+## 最大宽度坡
+给定一个整数数组A，坡是元组(i, j)，其中i < j且 A[i]<=A[j]。这样的坡的宽度为 j - i。找出 A中的坡的最大宽度，如果不存在，返回 0。 
+```java
+class Solution {
+    public int maxWidthRamp(int[] A) {
+        if(A==null || A.length==0) {
+            return 0;
+        }
+        Stack<Integer> stack = new Stack<>();
+        for(int i=0; i<A.length; i++) {
+            if(stack.empty() || A[stack.peek()]>A[i]) {
+                stack.push(i);
+            }
+        }
+        int res = 0;
+        for(int i=A.length-1; i>0; i--) {
+            while(!stack.empty() && A[stack.peek()]<=A[i]) {
+                res = Math.max(res, i-stack.pop());
+            }
+        }
+        return res;
+    }
+}
+```
+```java
+索引堆，对输入的数组中的数编号。此时再对输入的数组排序，那么编号也会随着变化。这样只需要比较前后编号差，找到差值最大是多少。
+```
+
+## 使数组唯一的最小增量
+给定整数数组 A，每次 move 操作将会选择任意 A[i]，并将其递增 1。返回使 A 中的每个值都是唯一的最少操作次数。  
+https://leetcode-cn.com/problems/minimum-increment-to-make-array-unique/  
+```java
+class Solution {
+    public int minIncrementForUnique(int[] A) {
+        Arrays.sort(A);
+        int res = 0;
+        for(int i=0; i<A.length-1; i++) {
+            if(A[i]<A[i+1]) {
+                
+            }
+            else {
+                res+=A[i]+1-A[i+1];
+                A[i+1]=A[i]+1;
+            }
+        }
+        return res;
+    }
+}
+```
+
+## 最长的斐波那契子序列的长度
+![](http://ww1.sinaimg.cn/large/005L0VzSly1g0uh8xivnqj30mo0crmzj.jpg)  
+https://leetcode-cn.com/problems/length-of-longest-fibonacci-subsequence/  
+```java
+class Solution {
+    public int lenLongestFibSubseq(int[] A) {
+        Map<Integer, Integer> dp = new HashMap<>();
+        for(int i=0; i<A.length; i++) {
+            dp.put(A[i], 1);
+        }
+        int res = 0;
+        for(int i=0; i<A.length; i++) {
+            for(int j=i+1; j<A.length; j++) {
+                if(dp.getOrDefault(A[i]+A[j], 0)==0) {
+                    continue;
+                }
+                int tmp = 2;
+                int a = A[i];
+                int b = A[j];
+                while(dp.getOrDefault(a+b, 0)!=0) {
+                    tmp++;
+                    int sum = a+b;
+                    a = b;
+                    b = sum;
+                }
+                res = Math.max(tmp, res);
+            }
+        }
+        return res;
+    }
+}
+```
+
+##  柱状图中最大的矩形
+![](http://ww1.sinaimg.cn/large/005L0VzSly1g0r4a6vw32j30ma0f4wf2.jpg)  
+https://leetcode-cn.com/problems/largest-rectangle-in-histogram/  
+```java
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        // 暴力法  
+        int max = 0;
+        int[] dp = new int[heights.length+2];
+        dp[0] = 0;
+        dp[dp.length-1] = 0;
+        for(int i=0; i<heights.length; i++) {
+            dp[i+1] = heights[i];
+        }
+        
+        for(int i=1; i<=heights.length; i++) {
+            int l = i;
+            int r = i;
+            int j = 0;
+            for(j=i; j>=0; j--) {
+                if(dp[j]<dp[i]) {      
+                    break;
+                }
+            }
+            l = j;
+            for(j=i; j<=dp.length-1; j++) {
+                if(dp[j]<dp[i]) {
+                    break;
+                }
+            }
+            r = j;
+            int h = dp[i];
+            max = Math.max(max, Math.abs(r-l-1)*h);
+        }
+        return max;
+    }
+}
+```
+```java
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        // 单调栈
+        int res = 0;
+        if(heights==null || heights.length==0) {
+            return 0;
+        }
+        Stack<Integer> stack = new Stack<>();
+        int i = 0;
+        for(i=0; i<heights.length; i++) {
+            if(stack.empty() || heights[stack.peek()]<=heights[i]) {
+                stack.push(i);
+            }
+            else {
+                int tmp = stack.pop();
+                int l = stack.empty() ? -1: stack.peek();
+                res = Math.max(res, (i-l-1)*heights[tmp]);
+                i--;
+            }
+        }
+        while(!stack.empty()) {
+            int tmp = stack.pop();
+            int l = stack.empty() ? -1: stack.peek();
+            res = Math.max(res, (i-l-1)*heights[tmp]);
+        }
+        return res;
+    }
+}
+```
+这题有个变种，宽度不一，可以按照底为1分割，套用上述解法。  
+https://ac.nowcoder.com/acm/contest/549/H  
+
+## 连续子数组的最大和
+https://www.nowcoder.com/practice/459bd355da1549fa8a49e350bf3df484?tpId=13&tqId=11183&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking  
+```java
+public class Solution {
+    public int FindGreatestSumOfSubArray(int[] array) {
+        int[] data = new int[array.length];
+        int max = Integer.MIN_VALUE;
+        for (int i=0; i<array.length; i++) {
+            if (i==0) {
+                data[i] = array[i];
+                max = array[i];
+                continue;
+            }
+            if (data[i-1]<=0) {
+                data[i] = array[i];
+            }
+            else {
+                data[i] = data[i-1]+array[i];
+            }
+            if (data[i]>max) {
+                max = data[i];
+            }
+        }
+        return max;
+    }
+}
+```
+
+## 长度最小的子数组
+![](http://ww1.sinaimg.cn/large/005L0VzSly1g0s928uzjuj30hu0c1wfe.jpg)  
+https://leetcode-cn.com/problems/minimum-size-subarray-sum/  
+```java
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        // 暴力法
+        if(nums==null || nums.length==0) 
+            return 0;
+        if(nums.length==1)
+            return nums[0]==s? 1: 0;
+        int res = nums.length;
+        for(int i=0; i<nums.length; i++) {
+            int sum = 0;
+            for(int j=i; j<nums.length; j++) {
+                if(sum+nums[j]>=s) {
+                    res = Math.min(res, j-i+1);
+                    break;
+                }
+                sum+=nums[j];
+                if(i==0&&j==nums.length-1&&sum<s)
+                    return 0;
+            }
+        }
+        return res;
+    }
+}
+```
+```java
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        // 滑动窗口
+        if(nums==null || nums.length==0) 
+            return 0;
+        if(nums.length==1)
+            return nums[0]==s? 1: 0;
+        int slow = 0;
+        int res = Integer.MAX_VALUE;
+        int sum = 0;
+        for(int i=0; i<nums.length; i++) {
+            sum += nums[i];
+            while(sum>=s) {
+                res = Math.min(res, i-slow+1);
+                sum -= nums[slow++];
+            }
+        }
+        return res!=Integer.MAX_VALUE? res: 0;
+    }
+}
+```
